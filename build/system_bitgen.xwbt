@@ -1,0 +1,7 @@
+INFILE=/home/mcmahonpc/Desktop/Matrix Creator/Digital II/lm32/build/system-routed.ncd
+OUTFILE=/home/mcmahonpc/Desktop/Matrix Creator/Digital II/lm32/build/system.bit
+FAMILY=Spartan6
+PART=xc6slx4-2tqg144
+WORKINGDIR=/home/mcmahonpc/Desktop/Matrix Creator/Digital II/lm32/build
+LICENSE=WebPack
+USER_INFO=210656542_0_0_533
