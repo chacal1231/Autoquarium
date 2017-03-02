@@ -87,7 +87,9 @@ void commandUart_TaskHandler(void)
         uart_putchar(byte_u8);
     }
 }
-
+/*************************************************************************/ /**
+Función inicialización WIFI
+*****************************************************************************/
 void Esp8266StartListen(void){
     mSleep(5000);
     uart_putstr("AT\r\n");
@@ -96,12 +98,13 @@ void Esp8266StartListen(void){
     mSleep(1000);
     uart_putstr("AT+CIPMODE=1\r\n");
     mSleep(1000);
-    uart_putstr("AT+CIPSTART=\"TCP\",\"172.20.10.2\",8080\r\n");
+    uart_putstr("AT+CIPSTART=\"TCP\",\"200.112.210.132\",7777\r\n");
     mSleep(1000);
     uart_putstr("AT+CIPSEND\r\n");
     mSleep(1000);
 }
-
+/*************************************************************************/ /**
+*****************************************************************************/
 int main(void)
 {
 
