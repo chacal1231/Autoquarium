@@ -87,6 +87,11 @@ void commandUart_TaskHandler(void)
         uart_putchar(byte_u8);
     }
 }
+
+void ListenPi(void){
+    char PiUartRx = uart1_getchar();
+        uart_putchar(PiUartRx);
+}
 /*************************************************************************/ /**
 Función inicialización WIFI
 *****************************************************************************/
@@ -118,7 +123,9 @@ int main(void)
 
     SK6812RGBW_init();
     //Esp8266StartListen();
-    uart1_putstr("HOLA DESDE UART1");
+    while(1){
+        ListenPi();
+    }
     
 
     return 0;
