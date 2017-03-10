@@ -91,17 +91,17 @@ void commandUart_TaskHandler(void)
 Función inicialización WIFI
 *****************************************************************************/
 void Esp8266StartListen(void){
-    mSleep(5000);
-    uart_putstr("AT\r\n");
-    mSleep(1000);
-    uart_putstr("AT+CIPMUX=0\r\n");
-    mSleep(1000);
-    uart_putstr("AT+CIPMODE=1\r\n");
-    mSleep(1000);
-    uart_putstr("AT+CIPSTART=\"TCP\",\"200.112.210.132\",7777\r\n");
-    mSleep(1000);
-    uart_putstr("AT+CIPSEND\r\n");
-    mSleep(1000);
+    mSleep(5);
+    uart1_putstr("AT\r\n");
+    mSleep(1);
+    uart1_putstr("AT+CIPMUX=0\r\n");
+    mSleep(1);
+    uart1_putstr("AT+CIPMODE=1\r\n");
+    mSleep(1);
+    uart1_putstr("AT+CIPSTART=\"TCP\",\"200.112.210.132\",7777\r\n");
+    mSleep(1);
+    uart1_putstr("AT+CIPSEND\r\n");
+    mSleep(1);
 }
 /*************************************************************************/ /**
 *****************************************************************************/
@@ -117,12 +117,9 @@ int main(void)
     uart_init();
 
     SK6812RGBW_init();
-    Esp8266StartListen();
-
-    while (1)
-    {
-        commandUart_TaskHandler();
-    }
+    //Esp8266StartListen();
+    uart1_putstr("HOLA DESDE UART1");
+    
 
     return 0;
 }

@@ -9,7 +9,7 @@ module system_tb;
 // Parameter (may differ for physical synthesis)
 //----------------------------------------------------------------------------
 parameter tck              = 20;       // clock period in ns
-parameter uart_baud_rate   = 57600;  // uart baud rate for simulation 
+parameter uart_baud_rate   = 115200;  // uart baud rate for simulation 
 
 parameter clk_freq = 1000000000 / tck; // Frequenzy in HZ
 //----------------------------------------------------------------------------
@@ -25,6 +25,8 @@ wire led_control;
 //----------------------------------------------------------------------------
 wire         uart_rxd;
 wire         uart_txd;
+wire         uart_rxd1;
+wire         uart_txd1;
 
 //----------------------------------------------------------------------------
 // Device Under Test 
@@ -38,9 +40,12 @@ system #(
 	.rst(          rst    ),
 	.led(          led    ),
     .led_control(          led_control    ),
-	// Uart
+	// UART0
 	.uart_rxd(  uart_rxd  ),
-	.uart_txd(  uart_txd  )
+	.uart_txd(  uart_txd  ),
+	// UART1
+	.uart_rxd1(  uart_rxd1  ),
+	.uart_txd1(  uart_txd1  )
 );
 
 /* Clocking device */

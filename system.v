@@ -23,9 +23,12 @@ module system
 	output            led,
 	/* SK6812RGBW */
     output led_control,
-	// UART
+	// UART_0
 	input             uart_rxd, 
-	output            uart_txd
+	output            uart_txd,
+	// UART_1
+	input             uart_rxd1, 
+	output            uart_txd1
 );
 
 
@@ -40,6 +43,7 @@ wire  [31:0] gnd32 = 32'h00000000;
 wire [31:0]  lm32i_adr,
              lm32d_adr,
              uart0_adr,
+             uart1_adr,
              SK6812RGBW0_adr,
              timer0_adr,
              gpio0_adr,
@@ -54,6 +58,8 @@ wire [31:0]  lm32i_dat_r,
              lm32d_dat_w,
              uart0_dat_r,
              uart0_dat_w,
+             uart1_dat_r,
+             uart1_dat_w,
              SK6812RGBW0_dat_r,
              SK6812RGBW0_dat_w,
              timer0_dat_r,
@@ -70,6 +76,7 @@ wire [31:0]  lm32i_dat_r,
 wire [3:0]   lm32i_sel,
              lm32d_sel,
              uart0_sel,
+             uart1_sel,
              SK6812RGBW0_sel,
              timer0_sel,
              gpio0_sel,
@@ -80,6 +87,7 @@ wire [3:0]   lm32i_sel,
 wire         lm32i_we,
              lm32d_we,
              uart0_we,
+             uart1_we,
              SK6812RGBW0_we,
              timer0_we,
              gpio0_we,
@@ -91,6 +99,7 @@ wire         lm32i_we,
 wire         lm32i_cyc,
              lm32d_cyc,
              uart0_cyc,
+             uart1_cyc,
              SK6812RGBW0_cyc,
              timer0_cyc,
              gpio0_cyc,
@@ -102,6 +111,7 @@ wire         lm32i_cyc,
 wire         lm32i_stb,
              lm32d_stb,
              uart0_stb,
+             uart1_stb,
              SK6812RGBW0_stb,
              timer0_stb,
              gpio0_stb,
@@ -112,6 +122,7 @@ wire         lm32i_stb,
 wire         lm32i_ack,
              lm32d_ack,
              uart0_ack,
+             uart1_ack,
              SK6812RGBW0_ack,
              timer0_ack,
              gpio0_ack,
@@ -154,7 +165,7 @@ conbus #(
 	.s1_addr(4'h2),// uart0      0x20000000 
 	.s2_addr(4'h3),// timer      0x30000000 
 	.s3_addr(4'h4),// gpio       0x40000000 
-	.s4_addr(4'h5),// ---        0x50000000 
+	.s4_addr(4'h5),// uart1      0x50000000 
 	.s5_addr(4'h6) // SK6812RGBW 0x60000000 
 ) conbus0(
 	.sys_clk( clk ),
@@ -216,14 +227,14 @@ conbus #(
 	.s3_stb_o(  gpio0_stb   ),
 	.s3_ack_i(  gpio0_ack   ),
 	// Slave4
-	.s4_dat_i(   ),
-	.s4_dat_o(   ),
-	.s4_adr_o(     ),
-	.s4_sel_o(     ),
-	.s4_we_o(       ),
-	.s4_cyc_o(     ),
-	.s4_stb_o(     ),
-	.s4_ack_i(     ),
+	.s4_dat_i(  uart1_dat_r ),
+	.s4_dat_o(  uart1_dat_w ),
+	.s4_adr_o(  uart1_adr   ),
+	.s4_sel_o(  uart1_sel   ),
+	.s4_we_o (  uart1_we   ),
+	.s4_cyc_o(  uart1_cyc   ),
+	.s4_stb_o(  uart1_stb   ),
+	.s4_ack_i(  uart1_ack   ),
 	// Slave5
 	.s5_dat_i(  SK6812RGBW0_dat_r ),
 	.s5_dat_o(  SK6812RGBW0_dat_w ),
@@ -324,6 +335,35 @@ wb_uart #(
 	.uart_rxd( uart0_rxd ),
 	.uart_txd( uart0_txd )
 );
+
+//---------------------------------------------------------------------------
+// uart1
+//---------------------------------------------------------------------------
+wire uart1_rxd;
+wire uart1_txd;
+
+wb_uart #(
+	.clk_freq( clk_freq        ),
+	.baud(     uart_baud_rate  )
+) uart1 (
+	.clk( clk ),
+	.reset( ~rst ),
+	//
+	.wb_adr_i( uart1_adr ),
+	.wb_dat_i( uart1_dat_w ),
+	.wb_dat_o( uart1_dat_r ),
+	.wb_stb_i( uart1_stb ),
+	.wb_cyc_i( uart1_cyc ),
+	.wb_we_i(  uart1_we ),
+	.wb_sel_i( uart1_sel ),
+	.wb_ack_o( uart1_ack ), 
+//	.intr(       uart1_intr ),
+	.uart_rxd( uart1_rxd ),
+	.uart_txd( uart1_txd )
+);
+
+assign uart_txd1  = uart1_txd;
+assign uart1_rxd = uart_rxd1;
 
 //---------------------------------------------------------------------------
 // timer0

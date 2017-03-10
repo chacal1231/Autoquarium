@@ -94,10 +94,15 @@ typedef struct {
    volatile uint32_t rxtx;
 } uart_t;
 
+//UART0
 void uart_init(void);
 void uart_putchar(char c);
 void uart_putstr(char *str);
 char uart_getchar(void);
+//UART1
+void uart1_putchar(char c);
+void uart1_putstr(char *str);
+char uart1_getchar(void);
 
 /***************************************************************************
  * SPI0
@@ -140,6 +145,7 @@ void SK6812RGBW_ram_w(void);
 extern timerH_t *timer0;
 extern uart_t   *uart0; 
 extern gpio_t   *gpio0;
+extern uart_t   *uart1;
 extern SK6812RGBW_t   *SK6812RGBW0;
 extern uint32_t *sram0; 
 

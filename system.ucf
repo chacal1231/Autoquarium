@@ -7,5 +7,9 @@ NET  rst  LOC = "P105" | PULLUP;
 NET "uart_rxd" LOC = "P78"; //P69 RX_PI
 NET "uart_txd" LOC = "P79"; //P70 TX_PI
 
+# ==== UART1 ====
+NET "uart_rxd1" LOC = "P69"; //P69 RX_PI
+NET "uart_txd1" LOC = "P70"; //P70 TX_PI
+
 # ==== EVERLOOP ====
 NET "led_control"  LOC = "P56";

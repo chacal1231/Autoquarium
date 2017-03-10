@@ -3,7 +3,7 @@
 uart_t       *uart0       = (uart_t *)       0x20000000;
 timerH_t     *timer0      = (timerH_t *)     0x30000000;
 gpio_t       *gpio0       = (gpio_t *)       0x40000000;
-spi_t        *spi0        = (spi_t *)        0x50000000;
+uart_t       *uart1       = (uart_t *)       0x50000000;
 SK6812RGBW_t *SK6812RGBW0 = (SK6812RGBW_t *) 0x60000000;
 
 isr_ptr_t isr_table[32];
@@ -110,7 +110,7 @@ void uart_init(void)
     // Setup Divisor register (Fclk / Baud)
     //uart0->div = (FCPU/(57600*16));
 }
-
+//UART0
 char uart_getchar(void)
 {   
     while (! (uart0->ucr & UART_DR)) ;
@@ -128,6 +128,27 @@ void uart_putstr(char *str)
     char *c = str;
     while(*c) {
         uart_putchar(*c);
+        c++;
+    }
+}
+//UART1
+char uart1_getchar(void)
+{   
+    while (! (uart1->ucr & UART_DR)) ;
+    return uart1->rxtx;
+}
+
+void uart1_putchar(char c)
+{
+    while (uart1->ucr & UART_BUSY) ;
+    uart1->rxtx = c;
+}
+
+void uart1_putstr(char *str)
+{
+    char *c = str;
+    while(*c) {
+        uart1_putchar(*c);
         c++;
     }
 }
