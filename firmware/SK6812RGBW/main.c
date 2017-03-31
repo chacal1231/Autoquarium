@@ -48,7 +48,9 @@ void commandProcessing(const char *buffer)
 {
 
     int rgbw = atoi(buffer);
-    SK6812RGBW_rgbw(rgbw);
+    if(rgbw == 1){
+        uart_putstr("Recibi un 1\r\n");
+    }
 
     return;
 }
@@ -90,23 +92,45 @@ void commandUart_TaskHandler(void)
 
 void ListenPi(void){
     char PiUartRx = uart1_getchar();
-        uart_putchar(PiUartRx);
+    if(PiUartRx=='1'){
+        uart_putstr("Hola\r\n");
+    }
 }
 /*************************************************************************/ /**
-Función inicialización WIFI
+Función Conectar al servidor
 *****************************************************************************/
-void Esp8266StartListen(void){
-    mSleep(5);
-    uart1_putstr("AT\r\n");
-    mSleep(1);
-    uart1_putstr("AT+CIPMUX=0\r\n");
-    mSleep(1);
-    uart1_putstr("AT+CIPMODE=1\r\n");
-    mSleep(1);
-    uart1_putstr("AT+CIPSTART=\"TCP\",\"200.112.210.132\",7777\r\n");
-    mSleep(1);
-    uart1_putstr("AT+CIPSEND\r\n");
-    mSleep(1);
+void WIFI_INIT(void){
+    mSleep(3000);
+    uart_putstr("AT\r\n");
+    mSleep(3000);
+    uart_putstr("AT+CWMODE=1\r\n");
+    mSleep(3000);
+    uart_putstr("AT+CWJAP=\"MOVISTAR WIFI\",\"Aa123456\"\r\n");
+    mSleep(3000);
+}
+/*************************************************************************/ /**
+*****************************************************************************/
+/*************************************************************************/ /**
+Función Conectar al servidor
+*****************************************************************************/
+void WIFIConnectServer(void){
+    mSleep(3000);
+    uart_putstr("AT\r\n");
+    mSleep(3000);
+    uart_putstr("AT+CIPMUX=0\r\n");
+    mSleep(3000);
+    uart_putstr("AT+CIPMODE=1\r\n");
+    mSleep(3000);
+    uart_putstr("AT+CIPSTART=\"TCP\",\"200.112.210.132\",7777\r\n");
+    mSleep(3000);
+    uart_putstr("AT+CIPSEND\r\n");
+    mSleep(3000);
+    int i = 0;
+    do{ 
+        i++;
+        uart_putstr("Hola desde la MATRIX CREATOR\r\n");
+    } while(i<10);
+    
 }
 /*************************************************************************/ /**
 *****************************************************************************/
@@ -122,9 +146,11 @@ int main(void)
     uart_init();
 
     SK6812RGBW_init();
-    //Esp8266StartListen();
+    WIFI_INIT();
+    WIFIConnectServer();
+
     while(1){
-        ListenPi();
+        commandUart_TaskHandler();
     }
     
 

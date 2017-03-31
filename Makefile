@@ -45,7 +45,7 @@ SRC=                                      \
 	../rtl/wb_conbus/conbus.v          \
 	../rtl/wb_conbus/conbus_arb.v      
 
-IP=192.168.1.20
+IP=192.168.2.1
 #############################################################################
 # Synthesis constants
 SYNCLEAN=system.bgn system.drc system.mrp system.ngd system.pcf 

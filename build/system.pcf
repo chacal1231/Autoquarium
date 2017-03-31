@@ -1,0 +1,15 @@
+//! **************************************************************************
+// Written by: Map P.20131013 on Fri Mar 24 08:52:06 2017
+//! **************************************************************************
+
+SCHEMATIC START;
+COMP "clk" LOCATE = SITE "P84" LEVEL 1;
+COMP "led" LOCATE = SITE "P39" LEVEL 1;
+COMP "rst" LOCATE = SITE "P105" LEVEL 1;
+COMP "led_control" LOCATE = SITE "P56" LEVEL 1;
+COMP "uart_rxd1" LOCATE = SITE "P69" LEVEL 1;
+COMP "uart_txd1" LOCATE = SITE "P70" LEVEL 1;
+COMP "uart_rxd" LOCATE = SITE "P78" LEVEL 1;
+COMP "uart_txd" LOCATE = SITE "P79" LEVEL 1;
+SCHEMATIC END;
+
