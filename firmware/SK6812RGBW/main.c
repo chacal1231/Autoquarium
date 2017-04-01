@@ -44,15 +44,22 @@ char *itoa(int i, char b[])
 /*************************************************************************/ /**
 Función que implementa una calculadora sencilla
 *****************************************************************************/
-void commandProcessing(const char *buffer)
+void commandProcessing(char *buffer)
 {
-
-    int rgbw = atoi(buffer);
-    if(rgbw == 1){
-        uart_putstr("Recibi un 1\r\n");
+    int t = strcmp("hola", buffer);
+    if(t<0){
+        uart_putstr("Hola < ");
+        uart_putstr(buffer);
+        uart_putstr("\r\n");
+    }else if(t>0){
+        uart_putstr("Hola > ");
+        uart_putstr(buffer);
+        uart_putstr("\r\n");
+    }else if(t==0){
+        uart_putstr("Hola = ");
+        uart_putstr(buffer);
+        uart_putstr("\r\n");
     }
-
-    return;
 }
 
 /*************************************************************************/ /**
@@ -67,7 +74,6 @@ void commandUart_TaskHandler(void)
     //Si se exede se envia una alerta y se borran los datos del buffer
     if (UartBufferPtr >= UART_COMMANDS_BUFFER_SIZE)
     {
-        uart_putstr("\r\nUartBuffer size exceeded:serial commands\r\n-->");
         UartBufferPtr = 0;
         return;
     }
@@ -77,25 +83,18 @@ void commandUart_TaskHandler(void)
     if (byte_u8 == FINALCHARACTER1 || byte_u8 == FINALCHARACTER2)
     {
         UartBuffer[UartBufferPtr++] = '\0'; // null character manually added
-        uart_putstr("\r\n");
         commandProcessing(UartBuffer);
-        uart_putstr("-->");
         UartBufferPtr = 0;
     }
     else if (byte_u8 >= ' ' && byte_u8 <= '~')
     {
         UartBuffer[UartBufferPtr++] = byte_u8;
         //Se hace un echo de caracteres almacenados
-        uart_putchar(byte_u8);
+        //uart_putchar(byte_u8);
     }
 }
 
-void ListenPi(void){
-    char PiUartRx = uart1_getchar();
-    if(PiUartRx=='1'){
-        uart_putstr("Hola\r\n");
-    }
-}
+
 /*************************************************************************/ /**
 Función Conectar al servidor
 *****************************************************************************/
@@ -105,7 +104,7 @@ void WIFI_INIT(void){
     mSleep(3000);
     uart_putstr("AT+CWMODE=1\r\n");
     mSleep(3000);
-    uart_putstr("AT+CWJAP=\"MOVISTAR WIFI\",\"Aa123456\"\r\n");
+    uart_putstr("AT+CWJAP=\"LenovoAndroid\",\"54321osk\"\r\n");
     mSleep(3000);
 }
 /*************************************************************************/ /**
