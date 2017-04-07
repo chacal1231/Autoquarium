@@ -1,10 +1,9 @@
 #include "soc-hw.h"
 
-uart_t       *uart0       = (uart_t *)       0x20000000;
-timerH_t     *timer0      = (timerH_t *)     0x30000000;
-gpio_t       *gpio0       = (gpio_t *)       0x40000000;
-uart_t       *uart1       = (uart_t *)       0x50000000;
-SK6812RGBW_t *SK6812RGBW0 = (SK6812RGBW_t *) 0x60000000;
+uart_t              *uart0          = (uart_t *)            0x20000000;
+timerH_t            *timer0         = (timerH_t *)          0x30000000;
+gpio_t              *gpio0          = (gpio_t *)            0x40000000;
+uart_t              *uart1          = (uart_t *)            0x50000000;
 
 isr_ptr_t isr_table[32];
 
@@ -154,47 +153,40 @@ void uart1_putstr(char *str)
 }
 
 /***************************************************************************
- * SK6812RGBW Functions
+ * Comunicaciones Functions
  */
-void SK6812RGBW_init(void)
-{
-    SK6812RGBW_nBits(35*32);//35 Leds
-    SK6812RGBW_source(0);
-    SK6812RGBW_rgbw(0x00000000);
-    SK6812RGBW_rgbw(0x00000000);
-}
 
-uint32_t SK6812RGBW_busy(void)
-{
-    return SK6812RGBW0->busy;
-}
 
-void SK6812RGBW_rgbw(uint32_t rgbw)
-{
-    while (SK6812RGBW_busy());
-    SK6812RGBW0->rgbw = rgbw;
+/*************************************************************************/ /**
+Función Conectar al servidor
+*****************************************************************************/
+void WIFI_INIT(void){
+    mSleep(2000);
+    uart_putstr("AT\r\n");
+    mSleep(2000);
+    uart_putstr("AT+CWMODE=1\r\n");
+    mSleep(2000);
+    uart_putstr("AT+CWJAP=\"LenovoAndroid\",\"54321osk\"\r\n");
+    mSleep(6000);
 }
-
-void SK6812RGBW_nBits(uint32_t nBits)
-{
-    while (SK6812RGBW_busy());
-    SK6812RGBW0->nBits = nBits;
+/*************************************************************************/ /**
+Función Conectar al servidor
+*****************************************************************************/
+void WIFIConnectServer(void){
+    uart_putstr("AT\r\n");
+    mSleep(2000);
+    uart_putstr("AT+CIPMUX=0\r\n");
+    mSleep(2000);
+    uart_putstr("AT+CIPMODE=1\r\n");
+    mSleep(2000);
+    uart_putstr("AT+CIPSTART=\"TCP\",\"200.112.210.132\",7777\r\n");
+    mSleep(3000);
 }
-
-void SK6812RGBW_source(uint32_t source)
-{
-    while (SK6812RGBW_busy());
-    SK6812RGBW0->source = source;
+/*************************************************************************/ /**
+Función Conectar al servidor
+*****************************************************************************/
+void WIFIStartSend(void){
+    uart_putstr("AT+CIPSEND\r\n");
+    mSleep(2000);
 }
-
-void SK6812RGBW_ram(uint32_t color, uint32_t add)
-{
-  uint32_t   *wram   = (uint32_t *)    (0x60000000 + 0x1000 + add);
-  *wram = color;
-}
-
-void SK6812RGBW_ram_w(void)
-{
-    while (SK6812RGBW_busy());
-    SK6812RGBW0->rgbw = 0;
-}
+/*************************************************************************/

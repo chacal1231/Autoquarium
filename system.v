@@ -6,14 +6,10 @@
 
 module system
 #(
-// 	parameter   bootram_file0     = "../firmware/calc/image0.ram",
-// 	parameter   bootram_file1     = "../firmware/calc/image1.ram",
-// 	parameter   bootram_file2     = "../firmware/calc/image2.ram",
-// 	parameter   bootram_file3     = "../firmware/calc/image3.ram",
-	parameter   bootram_file0     = "../firmware/SK6812RGBW/image0.ram",
-	parameter   bootram_file1     = "../firmware/SK6812RGBW/image1.ram",
-	parameter   bootram_file2     = "../firmware/SK6812RGBW/image2.ram",
-	parameter   bootram_file3     = "../firmware/SK6812RGBW/image3.ram",
+	parameter   bootram_file0     = "../firmware/AutoAquarium/image0.ram",
+	parameter   bootram_file1     = "../firmware/AutoAquarium/image1.ram",
+	parameter   bootram_file2     = "../firmware/AutoAquarium/image2.ram",
+	parameter   bootram_file3     = "../firmware/AutoAquarium/image3.ram",
 	parameter   clk_freq         = 50000000,
 	parameter   uart_baud_rate   = 115200
 ) (
