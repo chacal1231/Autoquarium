@@ -21,7 +21,10 @@ Leer datos de la UART
 *****************************************************************************/
 void commandProcessing(char *buffer){
     int error_wifi = strcmp("FAIL", buffer);
-    int wifi_connect = strcmp("WIFI GOT IP", buffer);
+    char *wifi_connect_s;
+    wifi_connect_s = strstr(buffer,"WIFI GOT IP");
+    int wifi_connect = strcmp("WIFI GOT IP", wifi_connect_s);
+    uart_putstr(wifi_connect_s);
     int error_server = strcmp("CLOSED",buffer);
     int server_link = strcmp("Linked", buffer);
     if(error_wifi == 0){
