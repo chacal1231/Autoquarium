@@ -20,26 +20,41 @@ uint32_t UartBufferPtr = 0;
 Leer datos de la UART
 *****************************************************************************/
 void commandProcessing(char *buffer){
-    int error_wifi = strcmp("FAIL", buffer);
+    char *error_wifi_s;
     char *wifi_connect_s;
+    char *error_server_s;
+    char *server_link_s;
+    //Detectar si no se conecta al WIFI
+    error_wifi_s = strstr("FAIL",buffer);
+    int error_wifi = strcmp("FAIL", error_wifi_s);
+    //Detectar si no hay internet
     wifi_connect_s = strstr("WIFI GOT IP",buffer);
     int wifi_connect = strcmp("WIFI GOT IP", wifi_connect_s);
-    uart_putstr(wifi_connect_s);
-    int error_server = strcmp("CLOSED",buffer);
-    int server_link = strcmp("Linked", buffer);
+    //Detectar si se desconectó del socket
+    error_server_s = strstr("CLOSED",buffer);
+    int error_server = strcmp("CLOSED",error_server_s);
+    //Detectar si se conectó al socket
+    server_link_s = strstr("Linked",buffer);
+    int server_link = strcmp("Linked", server_link_s);
     if(error_wifi == 0){
+        uart_putstr("ESTADO ERROR RED\r\n");
         uart_putstr("AT+RST\r\n");
         mSleep(2000);
         WIFI_INIT();
+        error_wifi_s = "";
+        error_wifi = 9;
     }
-    if(wifi_connect == 0){
+    else if(wifi_connect == 0){
+        uart_putstr("ESTADO CONECTADO RED\r\n");
         mSleep(1000);
         WIFIConnectServer();
     }
-    if(error_server == 0){
+    else if(error_server == 0){
+        uart_putstr("ESTADO ERROR SERVIDOR\r\n");
         WIFIConnectServer();
     }
-    if(server_link == 0){
+    else if(server_link == 0){
+        uart_putstr("ESTADO CONECTADO SERVIDOR\r\n");
         WIFIStartSend();
     }
 }
