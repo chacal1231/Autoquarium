@@ -193,6 +193,7 @@ void WIFIStartSend(void){
 Función enviar potencia
 *****************************************************************************/
 void WIFISendPotencia(uint32_t Potencia){
+    uart_putstr(Potencia);
 
 }
 /*************************************************************************/ /**
