@@ -232,3 +232,9 @@ Función recibir comando de tomar imagen y enviarlo al módulo de cámara
 void WIFIRecivTakeImagen(void){
 
 }
+/*************************************************************************/ /**
+Función recibir comando de tomar imagen y enviarlo al módulo de cámara
+*****************************************************************************/
+void WIFIRecivAlimen(void){
+
+}

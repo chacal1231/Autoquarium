@@ -15,6 +15,21 @@ $sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 		$x=date(H);
 		$s="Time now is=$x\r\n";
 		socket_write($socket, $s, strlen($s));
+	}else if(strpos($mensaje,"pH=")!==false){
+	}
+	else if(strpos($mensaje,"pH=")!==false){
+	}
+	else if(strpos($mensaje,"Temp=")!==false){
+	}
+	else if(strpos($mensaje,"Filtro=")!==false){
+	}
+	else if(strpos($mensaje,"Imagen=")!==false){
+	}
+	else if(strpos($mensaje,"TakeI=")!==false){
+	}
+	else if(strpos($mensaje,"TakeFil=")!==false){
+	}
+	else if(strpos($mensaje,"TakeAlim=")!==false){
 	}
  }
 }
