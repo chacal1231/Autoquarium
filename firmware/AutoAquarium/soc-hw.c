@@ -167,7 +167,6 @@ void WIFI_INIT(void){
     uart_putstr("AT+CWMODE=1\r\n");
     mSleep(2000);
     uart_putstr("AT+CWJAP=\"LenovoAndroid\",\"54321osk\"\r\n");
-    mSleep(6000);
 }
 /*************************************************************************/ /**
 Función Conectar al servidor
@@ -193,32 +192,41 @@ void WIFIStartSend(void){
 Función enviar potencia
 *****************************************************************************/
 void WIFISendPotencia(uint32_t Potencia){
-    uart_putstr(Potencia);
-
+    uart_putstr("Potencia=");
+    uart_putchar(Potencia);
+    uart_putstr("\r\n");
 }
 /*************************************************************************/ /**
 Función enviar pH
 *****************************************************************************/
 void WIFISendpH(uint32_t pH){
-
+    uart_putstr("pH=");
+    uart_putchar(pH);
+    uart_putstr("\r\n");
 }
 /*************************************************************************/ /**
 Función enviar Temperatura
 *****************************************************************************/
 void WIFISendTemp(uint32_t Temp){
-
+    uart_putstr("Temp=");
+    uart_putchar(Temp);
+    uart_putstr("\r\n");
 }
 /*************************************************************************/ /**
 Función enviar estado del filtro
 *****************************************************************************/
 void WIFISendFiltro(uint32_t Filtro){
-
+    uart_putstr("Filtro=");
+    uart_putchar(Filtro);
+    uart_putstr("\r\n");
 }
 /*************************************************************************/ /**
 Función enviar imagen
 *****************************************************************************/
 void WIFISendImagen(uint32_t Imagen){
-
+    uart_putstr("Imagen=");
+    uart_putchar(Imagen);
+    uart_putstr("\r\n");
 }
 /*************************************************************************/ /**
 Función recibir comando del filtro y enviarlo al módulo del filtro

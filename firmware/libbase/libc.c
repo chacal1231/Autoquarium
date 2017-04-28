@@ -303,8 +303,8 @@ void *memmove(void *dest, const void *src, size_t count)
 
 /**
  * strstr - Find the first substring in a %NUL terminated string
- * @s1: The string to be searched
- * @s2: The string to search for
+ * @s1: The string to search for
+ * @s2: The string to be searched
  */
 char *strstr(const char *s1, const char *s2)
 {
