@@ -31,7 +31,7 @@ void commandProcessing(const char *buffer){
     //Detectar si se conectó al socket
     char *server_link_s = strstr(buffer,"Linked");
     //Condicionales para verificación
-    if(error_wifi_s != NULL){
+    if(error_wifi_s != NULL || wifi_dis_s != NULL){
         uart_putstr("La palabra=");
         uart_putstr(error_wifi_s);
         uart_putstr("\r\n");
@@ -40,7 +40,7 @@ void commandProcessing(const char *buffer){
         mSleep(2000);
         WIFI_INIT();
     }
-    else if(wifi_connect_s != NULL || wifi_dis_s != NULL){
+    else if(wifi_connect_s != NULL){
         uart_putstr("La palabra=");
         uart_putstr(wifi_connect_s);
         uart_putstr("\r\n");

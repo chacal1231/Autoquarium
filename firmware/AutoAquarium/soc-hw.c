@@ -166,7 +166,7 @@ void WIFI_INIT(void){
     mSleep(2000);
     uart_putstr("AT+CWMODE=1\r\n");
     mSleep(2000);
-    uart_putstr("AT+CWJAP=\"LenovoAndroid\",\"54321osk\"\r\n");
+    uart_putstr("AT+CWJAP=\"-David McMahon\",\"masteryi\"\r\n");
 }
 /*************************************************************************/ /**
 Función Conectar al servidor
