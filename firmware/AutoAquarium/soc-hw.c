@@ -166,7 +166,9 @@ void WIFI_INIT(void){
     mSleep(2000);
     uart_putstr("AT+CWMODE=1\r\n");
     mSleep(2000);
-    uart_putstr("AT+CWJAP=\"-David McMahon\",\"masteryi\"\r\n");
+    uart_putstr("AT+CWJAP=\"Mcmahon\",\"jesus00rr\"\r\n");
+    mSleep(16000);
+    uart_putstr("AT+CWJAP?\r\n");
 }
 /*************************************************************************/ /**
 Función Conectar al servidor
@@ -179,7 +181,8 @@ void WIFIConnectServer(void){
     uart_putstr("AT+CIPMODE=1\r\n");
     mSleep(2000);
     uart_putstr("AT+CIPSTART=\"TCP\",\"200.112.210.132\",7777\r\n");
-    mSleep(3000);
+    mSleep(6000);
+    uart_putstr("AT+CIPSTATUS\r\n");
 }
 /*************************************************************************/ /**
 Función establecer conexión con el servidor Sockets
@@ -187,6 +190,12 @@ Función establecer conexión con el servidor Sockets
 void WIFIStartSend(void){
     uart_putstr("AT+CIPSEND\r\n");
     mSleep(2000);
+    uint32_t i;
+    for (i = 0; i < 100; ++i)
+    {
+        uart_putstr("Hola\r\n");
+    }
+    uart_putstr("Check\r\n");
 }
 /*************************************************************************/ /**
 Función enviar potencia

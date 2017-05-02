@@ -22,38 +22,41 @@ Leer datos de la UART
 void commandProcessing(const char *buffer){
     //Detectar si no se conecta al WIFI
     char *error_wifi_s = strstr(buffer, "FAIL");
-    // Detectar si se desconectó de la red
-    char *wifi_dis_s = strstr(buffer, "WIFI DISCONNECT");
-    //Detectar si no hay internet
-    char *wifi_connect_s = strstr(buffer,"WIFI GOT IP");
+    //Detectar si no se conecta al WIFIx2
+    char *error_wifi_s_1 = strstr(buffer, "No AP");
+    //Se desconectó del WIFI
+    char *error_wifi_s_2 = strstr(buffer, "STATUS:5");
+    //Detectar si se conectó al WIFI
+    char *wifi_connect_s = strstr(buffer,"+CWJAP:");
     //Detectar si se desconectó del socket
     char *error_server_s = strstr(buffer, "CLOSED");
     //Detectar si se conectó al socket
-    char *server_link_s = strstr(buffer,"Linked");
+    char *server_link_s = strstr(buffer, "STATUS:3");
+    //Detectar si se conectó al socket
+    char *server_link_s_1 = strstr(buffer, "STATUS:2");
+    //Detectar si se conectó al socket
+    char *server_link_s_2 = strstr(buffer, "STATUS:4");
+    //Verificación de conexión al servidor
+    char *server_check_s = strstr(buffer, "ERROR");
     //Condicionales para verificación
-    if(error_wifi_s != NULL || wifi_dis_s != NULL){
-        uart_putstr("La palabra=");
-        uart_putstr(error_wifi_s);
-        uart_putstr("\r\n");
-        uart_putstr("ESTADO ERROR RED\r\n");
-        uart_putstr("AT+RST\r\n");
-        mSleep(2000);
+    if(error_wifi_s != NULL || error_wifi_s_1 != NULL || error_wifi_s_2 != NULL){
         WIFI_INIT();
     }
-    else if(wifi_connect_s != NULL){
-        uart_putstr("La palabra=");
-        uart_putstr(wifi_connect_s);
-        uart_putstr("\r\n");
-        uart_putstr("ESTADO CONECTADO RED\r\n");
+    if(wifi_connect_s != NULL){
         mSleep(1000);
         WIFIConnectServer();
-    }else if(error_server_s != NULL){
-        uart_putstr("ESTADO ERROR SERVIDOR\r\n");
+    }
+    if(error_server_s != NULL){
         WIFIConnectServer();
     }
-    else if(server_link_s != NULL){
-        uart_putstr("ESTADO CONECTADO SERVIDOR\r\n");
+    if(server_link_s != NULL){
         WIFIStartSend();
+    }
+    if (server_link_s_1 != NULL || server_link_s_2 != NULL){
+        WIFIConnectServer();        
+    }
+    if(server_check_s != NULL){
+        WIFIConnectServer();
     }
     return;
 }
