@@ -36,8 +36,6 @@ void commandProcessing(const char *buffer){
     char *server_link_s_1 = strstr(buffer, "STATUS:2");
     //Detectar si se conectó al socket
     char *server_link_s_2 = strstr(buffer, "STATUS:4");
-    //Verificación de conexión al servidor
-    char *server_check_s = strstr(buffer, "ERROR");
     //Condicionales para verificación
     if(error_wifi_s != NULL || error_wifi_s_1 != NULL || error_wifi_s_2 != NULL){
         WIFI_INIT();
@@ -54,9 +52,6 @@ void commandProcessing(const char *buffer){
     }
     if (server_link_s_1 != NULL || server_link_s_2 != NULL){
         WIFIConnectServer();        
-    }
-    if(server_check_s != NULL){
-        WIFIConnectServer();
     }
     return;
 }

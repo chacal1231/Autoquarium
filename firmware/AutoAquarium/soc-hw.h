@@ -67,15 +67,17 @@ void mSleep(uint32_t msec);
 void uSleep(uint32_t usec);
 void tic_init(void);
 void tic_isr(void);
-//Comunicaciones 
+//Comunicaciones
 void WIFI_INIT(void);
 void WIFIConnectServer(void);
 void WIFIStartSend(void);
+void WIFISendVar(void);
 void WIFISendPotencia(uint32_t Potencia);
 void WIFISendpH(uint32_t pH);
 void WIFISendTemp(uint32_t Temp);
 void WIFISendFiltro(uint32_t Filtro);
 void WIFISendImagen(uint32_t imagen);
+void WIFISendComida(uint32_t Comida);
 void WIFIRecivFiltro(void);
 void WIFIRecivTakeImagen(void);
 /***************************************************************************

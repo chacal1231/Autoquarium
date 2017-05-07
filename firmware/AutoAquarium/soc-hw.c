@@ -166,7 +166,8 @@ void WIFI_INIT(void){
     mSleep(2000);
     uart_putstr("AT+CWMODE=1\r\n");
     mSleep(2000);
-    uart_putstr("AT+CWJAP=\"Mcmahon\",\"jesus00rr\"\r\n");
+    //uart_putstr("AT+CWJAP=\"LenovoAndroid\",\"54321osk\"\r\n");
+    uart_putstr("AT+CWJAP=\"-David McMahon\",\"masteryi\"\r\n");
     mSleep(16000);
     uart_putstr("AT+CWJAP?\r\n");
 }
@@ -180,7 +181,7 @@ void WIFIConnectServer(void){
     mSleep(2000);
     uart_putstr("AT+CIPMODE=1\r\n");
     mSleep(2000);
-    uart_putstr("AT+CIPSTART=\"TCP\",\"200.112.210.132\",7777\r\n");
+    uart_putstr("AT+CIPSTART=\"TCP\",\"200.112.210.132\",7778\r\n");
     mSleep(6000);
     uart_putstr("AT+CIPSTATUS\r\n");
 }
@@ -190,13 +191,24 @@ Función establecer conexión con el servidor Sockets
 void WIFIStartSend(void){
     uart_putstr("AT+CIPSEND\r\n");
     mSleep(2000);
-    uint32_t i;
-    for (i = 0; i < 100; ++i)
-    {
-        uart_putstr("Hola\r\n");
-    }
-    uart_putstr("Check\r\n");
+    WIFISendPotencia(0x30);
+    mSleep(1000);
+    WIFISendpH(0x31);
+    mSleep(1000);
+    WIFISendTemp(0x32);
+    mSleep(1000);
+    WIFISendFiltro(0x33);
+    mSleep(1000);
+    WIFISendImagen(0x34);
+    mSleep(1000);
+    WIFISendComida(0x35);
+    mSleep(900000);
+    uart_putstr("+++");
+    mSleep(1000);
+    uart_putstr("\r\n");
+    uart_putstr("AT+CIPSTATUS\r\n");    
 }
+
 /*************************************************************************/ /**
 Función enviar potencia
 *****************************************************************************/
@@ -235,6 +247,14 @@ Función enviar imagen
 void WIFISendImagen(uint32_t Imagen){
     uart_putstr("Imagen=");
     uart_putchar(Imagen);
+    uart_putstr("\r\n");
+}
+/*************************************************************************/ /**
+Función enviar Comida
+*****************************************************************************/
+void WIFISendComida(uint32_t Comida){
+    uart_putstr("Comida=");
+    uart_putchar(Comida);
     uart_putstr("\r\n");
 }
 /*************************************************************************/ /**
