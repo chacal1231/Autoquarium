@@ -5,6 +5,7 @@ timerH_t            *timer0         = (timerH_t *)          0x30000000;
 gpio_t              *gpio0          = (gpio_t *)            0x40000000;
 uart_t              *uart1          = (uart_t *)            0x50000000;
 leds_t              *leds0          = (leds_t *)            0x60000000;
+i2c_t               *i2c0           = (i2c_t *)             0x70000000;
 
 isr_ptr_t isr_table[32];
 
@@ -296,3 +297,45 @@ void leds_refresh(void){
 uint32_t leds_finish(void){
     return leds0->done;
 }
+
+/***************************************************************************
+ * I2C Functions
+ */
+ 
+void i2c_write_data(uint8_t addr_wr, uint8_t data){
+    while(i2c0->i2c_state == 1){
+        uSleep(50);
+    };
+    i2c0->rw        = 0;
+    uSleep(10);
+    i2c0->addr      = addr_wr;
+    uSleep(10);
+    i2c0->data_wr   = data;
+    uSleep(10);
+    i2c0->ena       = 1;
+    uSleep(10);
+    while(i2c0->i2c_state == 0){
+        uSleep(50);
+    };
+    i2c0->ena       = 0;
+};
+
+uint8_t i2c_read_data(uint8_t addr_rd){
+    while(i2c0->i2c_state == 1){
+        uSleep(50);
+    };
+    i2c0->rw        = 1;
+    uSleep(10);
+    i2c0->addr      = addr_rd;
+    uSleep(10);
+    i2c0->ena       = 1;
+    uSleep(10);
+    while(i2c0->i2c_state == 0){
+        uSleep(50);
+    };
+    i2c0->ena       = 0;
+    while(i2c0->i2c_state == 1){
+        uSleep(50);
+    };
+    return i2c0->data_rd;
+};

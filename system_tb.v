@@ -28,6 +28,15 @@ wire         uart_rxd1;
 wire         uart_txd1;
 
 //----------------------------------------------------------------------------
+// I2C
+//----------------------------------------------------------------------------
+
+wire 			i2c_scl, i2c_sda;
+   	
+reg sda_out = 1'bz;
+assign i2c_sda = sda_out;
+
+//----------------------------------------------------------------------------
 // Device Under Test 
 //----------------------------------------------------------------------------
 system #(
@@ -43,7 +52,10 @@ system #(
 	.uart_txd(  uart_txd  ),
 	// UART1
 	.uart_rxd1(  uart_rxd1  ),
-	.uart_txd1(  uart_txd1  )
+	.uart_txd1(  uart_txd1  ),
+	// I2C Wires
+	.sda(i2c_sda),
+	.scl(i2c_sda)
 );
 
 /* Clocking device */

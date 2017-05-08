@@ -95,6 +95,23 @@ typedef struct {
 void set_start(uint32_t start0, uint32_t data0);
 void leds_refresh(void);
 uint32_t leds_finish(void);
+
+/***************************************************************************
+ * I2C0
+ */
+
+typedef struct {
+   volatile uint32_t i2c_state;
+   volatile uint32_t data_rd;
+   volatile uint32_t rw;
+   volatile uint32_t addr;
+   volatile uint32_t data_wr;
+   volatile uint32_t ena;
+} i2c_t;
+
+void i2c_write_data(uint8_t addr_wr, uint8_t data);
+uint8_t i2c_read_data(uint8_t addr_rd);
+
 /***************************************************************************
  * GPIO0
  */

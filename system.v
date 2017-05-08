@@ -25,7 +25,10 @@ module system
 	output            uart_txd,
 	// UART_1
 	input             uart_rxd1, 
-	output            uart_txd1
+	output            uart_txd1,
+	//i2c
+	inout 		  sda,
+	inout		  scl	
 );
 
 
@@ -42,6 +45,7 @@ wire [31:0]  lm32i_adr,
              uart0_adr,
              uart1_adr,
              memory0_adr,
+             i2c0_adr,
              timer0_adr,
              gpio0_adr,
              ddr0_adr,
@@ -59,6 +63,8 @@ wire [31:0]  lm32i_dat_r,
              uart1_dat_w,
              memory0_dat_r,
              memory0_dat_w,
+             i2c0_dat_r,
+             i2c0_dat_w,
              timer0_dat_r,
              timer0_dat_w,
              gpio0_dat_r,
@@ -75,6 +81,7 @@ wire [3:0]   lm32i_sel,
              uart0_sel,
              uart1_sel,
              memory0_sel,
+             i2c0_sel,
              timer0_sel,
              gpio0_sel,
              bram0_sel,
@@ -86,6 +93,7 @@ wire         lm32i_we,
              uart0_we,
              uart1_we,
              memory0_we,
+             i2c0_we,
              timer0_we,
              gpio0_we,
              bram0_we,
@@ -98,6 +106,7 @@ wire         lm32i_cyc,
              uart0_cyc,
              uart1_cyc,
              memory0_cyc,
+             i2c0_cyc,
              timer0_cyc,
              gpio0_cyc,
              bram0_cyc,
@@ -110,6 +119,7 @@ wire         lm32i_stb,
              uart0_stb,
              uart1_stb,
              memory0_stb,
+             i2c0_stb,
              timer0_stb,
              gpio0_stb,
              bram0_stb,
@@ -121,6 +131,7 @@ wire         lm32i_ack,
              uart0_ack,
              uart1_ack,
              memory0_ack,
+             i2c0_ack,
              timer0_ack,
              gpio0_ack,
              bram0_ack,
@@ -163,7 +174,8 @@ conbus #(
 	.s2_addr(4'h3),// timer      0x30000000 
 	.s3_addr(4'h4),// gpio       0x40000000 
 	.s4_addr(4'h5),// uart1      0x50000000 
-	.s5_addr(4'h6) //Iluminacion 0x60000000 
+	.s5_addr(4'h6),//Iluminacion 0x60000000
+	.s6_addr(4'h7) //i2C 		 0x70000000 
 ) conbus0(
 	.sys_clk( clk ),
 	.sys_rst( ~rst ),
@@ -240,7 +252,16 @@ conbus #(
 	.s5_we_o(   memory0_we    ),
 	.s5_cyc_o(  memory0_cyc   ),
 	.s5_stb_o(  memory0_stb   ),
-	.s5_ack_i(  memory0_ack   )
+	.s5_ack_i(  memory0_ack   ),
+	// Slav6
+	.s6_dat_i(  i2c0_dat_r ),
+	.s6_dat_o(  i2c0_dat_w ),
+	.s6_adr_o(  i2c0_adr   ),
+	.s6_sel_o(  i2c0_sel   ),
+	.s6_we_o(   i2c0_we    ),
+	.s6_cyc_o(  i2c0_cyc   ),
+	.s6_stb_o(  i2c0_stb   ),
+	.s6_ack_i(  i2c0_ack   )
 	
 );
 
@@ -424,6 +445,29 @@ wb_control_top memory0(
 	.signal(out),
 	.done(done)
 	
+);
+
+//---------------------------------------------------------------------------
+// i2c
+//---------------------------------------------------------------------------
+wire sda;
+wire scl;
+
+i2c_master_wb i2c0 (
+	  .clk(clk),
+	  .reset( ~rst), 
+	  //
+	  .wb_adr_i( i2c0_adr ),
+	  .wb_dat_i( i2c0_dat_w ),
+	  .wb_dat_o( i2c0_dat_r ),
+	  .wb_stb_i( i2c0_stb ),
+	  .wb_cyc_i( i2c0_cyc ),
+	  .wb_we_i(  i2c0_we ),
+	  .wb_sel_i( i2c0_sel ),
+	  .wb_ack_o( i2c0_ack ),  
+	  //
+	  .sda(sda), 
+	  .scl(scl)
 );
 
 //----------------------------------------------------------------------------

@@ -43,7 +43,9 @@ SRC=                                      \
 	../rtl/wb_memory/control_led.v	\
 	../rtl/wb_memory/ram_using_file.v	\
 	../rtl/wb_conbus/conbus.v          \
-	../rtl/wb_conbus/conbus_arb.v      
+	../rtl/wb_conbus/conbus_arb.v      \
+	../rtl/wb_i2c/i2c_master_wb.v	\
+	../rtl/wb_i2c/i2c_master.v	
 
 IP=192.168.2.1
 #############################################################################
