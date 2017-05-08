@@ -52,14 +52,14 @@ reg trig0, trig1;
 reg en0, en1;
 reg ar0, ar1;
 
-wire [31:0] tcr0 = { 28'b0, en0, ar0, irqen0, trig0 };
-wire [31:0] tcr1 = { 28'b0, en1, ar1, irqen1, trig1 };
+wire [37:0] tcr0 = { 28'b0, en0, ar0, irqen0, trig0 };
+wire [37:0] tcr1 = { 28'b0, en1, ar1, irqen1, trig1 };
 
-reg  [31:0] counter0;
-reg  [31:0] counter1;
+reg  [37:0] counter0;
+reg  [37:0] counter1;
 
-reg  [31:0] compare0;
-reg  [31:0] compare1;
+reg  [37:0] compare0;
+reg  [37:0] compare1;
 
 wire match0 = (counter0 == compare0);
 wire match1 = (counter1 == compare1);
