@@ -88,27 +88,6 @@ void commandUart_TaskHandler(void)
 
 int main(void)
 {
-    //Estos son los pasos que se recomiendan en el datasheet
-    i2c_write_data(0x3C,0xAE);  //Display Off
-    i2c_write_data(0x3C,0xA8);  //Set MUX Ratio
-    i2c_write_data(0x3C,0x3F);
-    i2c_write_data(0x3C,0xD3);  //Set Display Offset
-    i2c_write_data(0x3C,0x00);
-    i2c_write_data(0x3C,0x40);  //Set Display Start Line
-    i2c_write_data(0x3C,0xA0);  //Set Segment re-map
-    i2c_write_data(0x3C,0xC0);  //Set COM Output Scan Direction
-    i2c_write_data(0x3C,0xDA);  //Set COM Pins hardware configuration
-    i2c_write_data(0x3C,0x02);  
-    i2c_write_data(0x3C,0x81);  //Set Contrast Control
-    i2c_write_data(0x3C,0x7F);
-    i2c_write_data(0x3C,0xA4);  //Disable Entire Display On
-    //i2c_write_data(0x3C,0xA6);    //Set Normal Display
-    i2c_write_data(0x3C,0xA7);  //Set Inverse Display
-    i2c_write_data(0x3C,0xD5);  //Set Osc Frequency
-    i2c_write_data(0x3C,0x80);
-    i2c_write_data(0x3C,0x8D);  //Enable charge pump regulator
-    i2c_write_data(0x3C,0x14);
-i2c_write_data(0x3C,0xAF); //Display On 
     // Init Commands      
     isr_init();
     //tic_init();
