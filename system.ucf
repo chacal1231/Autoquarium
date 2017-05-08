@@ -2,6 +2,7 @@
 NET "clk" LOC = "P84";
 NET  led  LOC = "P39";
 NET  rst  LOC = "P105" | PULLUP;
+NET "rst" CLOCK_DEDICATED_ROUTE = FALSE; 
 
 # ==== UART ====
 NET "uart_rxd" LOC = "P78"; //P69 RX_PI
@@ -12,4 +13,4 @@ NET "uart_rxd1" LOC = "P69"; //P69 RX_PI
 NET "uart_txd1" LOC = "P70"; //P70 TX_PI
 
 # ==== EVERLOOP ====
-NET "led_control"  LOC = "P56";
+//NET "led_control"  LOC = "P56";
