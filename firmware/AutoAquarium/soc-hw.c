@@ -4,6 +4,7 @@ uart_t              *uart0          = (uart_t *)            0x20000000;
 timerH_t            *timer0         = (timerH_t *)          0x30000000;
 gpio_t              *gpio0          = (gpio_t *)            0x40000000;
 uart_t              *uart1          = (uart_t *)            0x50000000;
+leds_t              *leds0          = (leds_t *)            0x60000000;
 
 isr_ptr_t isr_table[32];
 
@@ -274,4 +275,24 @@ Función recibir comando de tomar imagen y enviarlo al módulo de cámara
 *****************************************************************************/
 void WIFIRecivAlimen(void){
 
+}
+
+/***************************************************************************
+ *Iluminación
+ */
+
+void set_start(uint32_t start0, uint32_t data0)
+{   
+     leds0->init = 0;
+     leds0->rw = 0;
+     leds0->start_add = start0;
+     leds0->data = data0;
+}
+void leds_refresh(void){
+  leds0->rw=1;
+  leds0->init = 1;
+  leds0->init = 0;  
+}
+uint32_t leds_finish(void){
+    return leds0->done;
 }

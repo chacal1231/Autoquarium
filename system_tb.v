@@ -18,7 +18,6 @@ parameter clk_freq = 1000000000 / tck; // Frequenzy in HZ
 reg        clk;
 reg        rst;
 wire       led;
-wire led_control;
 
 //----------------------------------------------------------------------------
 // UART STUFF (testbench uart, simulating a comm. partner)
@@ -39,7 +38,6 @@ system #(
 	// Debug
 	.rst(          rst    ),
 	.led(          led    ),
-    .led_control(          led_control    ),
 	// UART0
 	.uart_rxd(  uart_rxd  ),
 	.uart_txd(  uart_txd  ),

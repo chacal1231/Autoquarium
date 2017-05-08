@@ -81,6 +81,21 @@ void WIFISendComida(uint32_t Comida);
 void WIFIRecivFiltro(void);
 void WIFIRecivTakeImagen(void);
 /***************************************************************************
+ * Iluminación
+ */
+
+typedef struct {
+   volatile uint32_t init;        //0x00
+   volatile uint32_t done;        //0x04
+   volatile uint32_t start_add;   //0x08
+   volatile uint32_t data;        //0x0C
+   volatile uint32_t rw;      //0x10
+} leds_t;
+
+void set_start(uint32_t start0, uint32_t data0);
+void leds_refresh(void);
+uint32_t leds_finish(void);
+/***************************************************************************
  * GPIO0
  */
 typedef struct {
@@ -142,6 +157,7 @@ extern timerH_t *timer0;
 extern uart_t   *uart0; 
 extern gpio_t   *gpio0;
 extern uart_t   *uart1;
+extern leds_t   *leds0;
 extern uint32_t *sram0; 
 
 #endif // SPIKEHW_H

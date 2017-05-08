@@ -39,9 +39,9 @@ SRC=                                      \
 	../rtl/wb_timer/wb_timer.v         \
 	../rtl/wb_gpio/wb_gpio.v           \
 	../rtl/wb_spi/wb_spi.v             \
-	../rtl/wb_SK6812RGBW/wb_SK6812RGBW.v     \
-	../rtl/wb_SK6812RGBW/SK6812RGBW.v       \
-	../rtl/wb_SK6812RGBW/ram.v       \
+	../rtl/wb_memory/wb_control_top.v	\
+	../rtl/wb_memory/control_led.v	\
+	../rtl/wb_memory/ram_using_file.v	\
 	../rtl/wb_conbus/conbus.v          \
 	../rtl/wb_conbus/conbus_arb.v      
 

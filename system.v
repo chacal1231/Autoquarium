@@ -17,8 +17,9 @@ module system
 	// Debug 
 	input             rst,
 	output            led,
-	/* SK6812RGBW */
-    output led_control,
+	//Iluminación
+	output done,
+	output out,
 	// UART_0
 	input             uart_rxd, 
 	output            uart_txd,
@@ -40,7 +41,7 @@ wire [31:0]  lm32i_adr,
              lm32d_adr,
              uart0_adr,
              uart1_adr,
-             SK6812RGBW0_adr,
+             memory0_adr,
              timer0_adr,
              gpio0_adr,
              ddr0_adr,
@@ -56,8 +57,8 @@ wire [31:0]  lm32i_dat_r,
              uart0_dat_w,
              uart1_dat_r,
              uart1_dat_w,
-             SK6812RGBW0_dat_r,
-             SK6812RGBW0_dat_w,
+             memory0_dat_r,
+             memory0_dat_w,
              timer0_dat_r,
              timer0_dat_w,
              gpio0_dat_r,
@@ -73,7 +74,7 @@ wire [3:0]   lm32i_sel,
              lm32d_sel,
              uart0_sel,
              uart1_sel,
-             SK6812RGBW0_sel,
+             memory0_sel,
              timer0_sel,
              gpio0_sel,
              bram0_sel,
@@ -84,7 +85,7 @@ wire         lm32i_we,
              lm32d_we,
              uart0_we,
              uart1_we,
-             SK6812RGBW0_we,
+             memory0_we,
              timer0_we,
              gpio0_we,
              bram0_we,
@@ -96,7 +97,7 @@ wire         lm32i_cyc,
              lm32d_cyc,
              uart0_cyc,
              uart1_cyc,
-             SK6812RGBW0_cyc,
+             memory0_cyc,
              timer0_cyc,
              gpio0_cyc,
              bram0_cyc,
@@ -108,7 +109,7 @@ wire         lm32i_stb,
              lm32d_stb,
              uart0_stb,
              uart1_stb,
-             SK6812RGBW0_stb,
+             memory0_stb,
              timer0_stb,
              gpio0_stb,
              bram0_stb,
@@ -119,7 +120,7 @@ wire         lm32i_ack,
              lm32d_ack,
              uart0_ack,
              uart1_ack,
-             SK6812RGBW0_ack,
+             memory0_ack,
              timer0_ack,
              gpio0_ack,
              bram0_ack,
@@ -162,7 +163,7 @@ conbus #(
 	.s2_addr(4'h3),// timer      0x30000000 
 	.s3_addr(4'h4),// gpio       0x40000000 
 	.s4_addr(4'h5),// uart1      0x50000000 
-	.s5_addr(4'h6) // SK6812RGBW 0x60000000 
+	.s5_addr(4'h6) //Iluminacion 0x60000000 
 ) conbus0(
 	.sys_clk( clk ),
 	.sys_rst( ~rst ),
@@ -232,14 +233,14 @@ conbus #(
 	.s4_stb_o(  uart1_stb   ),
 	.s4_ack_i(  uart1_ack   ),
 	// Slave5
-	.s5_dat_i(  SK6812RGBW0_dat_r ),
-	.s5_dat_o(  SK6812RGBW0_dat_w ),
-	.s5_adr_o(  SK6812RGBW0_adr   ),
-	.s5_sel_o(  SK6812RGBW0_sel   ),
-	.s5_we_o(   SK6812RGBW0_we    ),
-	.s5_cyc_o(  SK6812RGBW0_cyc   ),
-	.s5_stb_o(  SK6812RGBW0_stb   ),
-	.s5_ack_i(  SK6812RGBW0_ack   )
+	.s5_dat_i(  memory0_dat_r ),
+	.s5_dat_o(  memory0_dat_w ),
+	.s5_adr_o(  memory0_adr   ),
+	.s5_sel_o(  memory0_sel   ),
+	.s5_we_o(   memory0_we    ),
+	.s5_cyc_o(  memory0_cyc   ),
+	.s5_stb_o(  memory0_stb   ),
+	.s5_ack_i(  memory0_ack   )
 	
 );
 
@@ -404,23 +405,25 @@ wb_gpio gpio0 (
 );
 
 //---------------------------------------------------------------------------
-// SK6812RGBW
+// Iluminación
 //---------------------------------------------------------------------------
 
-wb_SK6812RGBW SK6812RGBW0 (
-   .clk(clk),
-   .reset(~rst),
-   // Wishbone interface
-   .wb_stb_i(SK6812RGBW0_stb),
-   .wb_cyc_i(SK6812RGBW0_cyc),
-   .wb_ack_o(SK6812RGBW0_ack),
-   .wb_we_i(SK6812RGBW0_we),
-   .wb_adr_i(SK6812RGBW0_adr),
-   .wb_sel_i(SK6812RGBW0_sel),
-   .wb_dat_i(SK6812RGBW0_dat_w),
-   .wb_dat_o(SK6812RGBW0_dat_r),
-   // SK6812RGBW Output
-   .led_control(led_control)
+wb_control_top memory0(
+
+	.clk( clk ),
+	.rst( ~rst ),
+	
+	.wb_adr_i( memory0_adr ),
+	.wb_dat_i( memory0_dat_w ),
+	.wb_dat_o( memory0_dat_r ),
+	.wb_stb_i( memory0_stb ),
+	.wb_cyc_i( memory0_cyc ),
+	.wb_we_i(  memory0_we ),
+	.wb_sel_i( memory0_sel   ),
+	.wb_ack_o( memory0_ack ),
+	.signal(out),
+	.done(done)
+	
 );
 
 //----------------------------------------------------------------------------
