@@ -88,6 +88,7 @@ void commandUart_TaskHandler(void)
 
 int main(void)
 {
+    sec_on_display();
     // Init Commands      
     isr_init();
     //tic_init();
@@ -97,9 +98,10 @@ int main(void)
     uart_init(); 
     WIFI_INIT();
     
-    while(1){
-        commandUart_TaskHandler();
-    }
+
+    //while(1){
+       // commandUart_TaskHandler();
+    //}
     
 
     return 0;

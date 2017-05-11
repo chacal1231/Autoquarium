@@ -13,6 +13,10 @@
 
 #define UART_RXBUFSIZE 32
 
+#define DISPLAY_ADDR  0X3C
+#define DISPLAY_COMMAND 0X00
+#define DISPLAY_INDEX 0X40
+
 
 /****************************************************************************
  * Types
@@ -100,17 +104,22 @@ uint32_t leds_finish(void);
  * I2C0
  */
 
+#define I2C_DR   0x03     //RX Data Ready
+#define I2C_BUSY 0x04     //I2C Busy
+#define I2C_ERR  0x02     //RX Error
+
 typedef struct {
-   volatile uint32_t i2c_state;
-   volatile uint32_t data_rd;
-   volatile uint32_t rw;
-   volatile uint32_t addr;
-   volatile uint32_t data_wr;
-   volatile uint32_t ena;
+   volatile uint32_t scr;
+   volatile uint32_t i2c_rx_data;
+   volatile uint32_t s_address;
+   volatile uint32_t s_reg;
+   volatile uint32_t tx_data;
+   volatile uint32_t start_wr;
+   volatile uint32_t start_rd;
 } i2c_t;
 
-void i2c_write_data(uint8_t addr_wr, uint8_t data);
-uint8_t i2c_read_data(uint8_t addr_rd);
+uint8_t i2c_read(uint32_t slave_addr, uint32_t per_addr);
+void i2c_write(uint32_t slave_addr, uint32_t per_addr, uint32_t data);
 
 /***************************************************************************
  * GPIO0
@@ -162,6 +171,14 @@ typedef struct {
 void spi_init(void);
 void spi_putchar(char c);
 char spi_getchar(void);
+
+/***************************************************************************
+ * Pantalla y pH
+ */
+void send_command_display(uint32_t addr, uint32_t command);
+void send_data_display(uint32_t addr, uint32_t data);
+void sec_on_display(void);
+void clear_GDRAM(void);
 
 /***************************************************************************
  * Comunicaciones
