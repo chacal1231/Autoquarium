@@ -26,6 +26,8 @@ void commandProcessing(const char *buffer){
     char *error_wifi_s_1 = strstr(buffer, "No AP");
     //Se desconectó del WIFI
     char *error_wifi_s_2 = strstr(buffer, "STATUS:5");
+    //Detectar si no se conecta al WIFIx3
+    char *error_wifi_s_3 = strstr(buffer, "WIFI GOT IP");
     //Detectar si se conectó al WIFI
     char *wifi_connect_s = strstr(buffer,"+CWJAP:");
     //Detectar si se desconectó del socket
@@ -45,7 +47,7 @@ void commandProcessing(const char *buffer){
     //Alimentar peces
     char *AlimentarPe = strstr(buffer, "Command4");
     //Condicionales para verificación
-    if(error_wifi_s != NULL || error_wifi_s_1 != NULL || error_wifi_s_2 != NULL){
+    if(error_wifi_s != NULL || error_wifi_s_1 != NULL || error_wifi_s_2 != NULL || error_wifi_s_3 != NULL){
         WIFI_INIT();
     }
     if(wifi_connect_s != NULL){
