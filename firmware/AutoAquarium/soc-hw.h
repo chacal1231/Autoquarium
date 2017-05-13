@@ -71,7 +71,9 @@ void mSleep(uint32_t msec);
 void uSleep(uint32_t usec);
 void tic_init(void);
 void tic_isr(void);
-//Comunicaciones
+/***************************************************************************
+ * Comunicaciones
+ */
 void WIFI_INIT(void);
 void WIFIConnectServer(void);
 void WIFIStartSend(void);
@@ -181,17 +183,33 @@ void sec_on_display(void);
 void clear_GDRAM(void);
 
 /***************************************************************************
- * Comunicaciones
+ * SK6812RGBW0
  */
+
+typedef struct {
+   volatile uint32_t nBits;
+   volatile uint32_t rgbw;
+   volatile uint32_t source;
+   volatile uint32_t busy;
+} SK6812RGBW_t;
+
+void SK6812RGBW_init(void);
+uint32_t SK6812RGBW_busy(void);
+void SK6812RGBW_rgbw(uint32_t rgbw);
+void SK6812RGBW_nBits(uint32_t nBits);
+void SK6812RGBW_source(uint32_t source);
+void SK6812RGBW_ram(uint32_t color, uint32_t add);
+void SK6812RGBW_ram_w(void);
 
 /***************************************************************************
  * Pointer to actual components
  */
-extern timerH_t *timer0;
-extern uart_t   *uart0; 
-extern gpio_t   *gpio0;
-extern uart_t   *uart1;
-extern leds_t   *leds0;
-extern uint32_t *sram0; 
+extern    timerH_t       *timer0;
+extern    uart_t         *uart0; 
+extern    gpio_t         *gpio0;
+extern    uart_t         *uart1;
+extern    leds_t         *leds0;
+extern    uint32_t       *sram0;
+extern    SK6812RGBW_t   *SK6812RGBW0; 
 
 #endif // SPIKEHW_H

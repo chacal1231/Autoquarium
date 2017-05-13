@@ -36,6 +36,9 @@ SRC=                                      \
 	../rtl/wb_everloop/wb_everloop.v     \
 	../rtl/wb_everloop/everloop.v     \
 	../rtl/wb_everloop/everloop_bram.v     \
+	../rtl/wb_SK6812RGBW/wb_SK6812RGBW.v     \
+	../rtl/wb_SK6812RGBW/SK6812RGBW.v       \
+	../rtl/wb_SK6812RGBW/ram.v       \
 	../rtl/wb_timer/wb_timer.v         \
 	../rtl/wb_gpio/wb_gpio.v           \
 	../rtl/wb_spi/wb_spi.v             \

@@ -6,6 +6,7 @@ gpio_t              *gpio0          = (gpio_t *)            0x40000000;
 uart_t              *uart1          = (uart_t *)            0x50000000;
 leds_t              *leds0          = (leds_t *)            0x60000000;
 i2c_t               *i2c0           = (i2c_t *)             0x70000000;
+SK6812RGBW_t        *SK6812RGBW0    = (SK6812RGBW_t *)      0x80000000;
 
 isr_ptr_t isr_table[32];
 
@@ -170,6 +171,7 @@ void WIFI_INIT(void){
     mSleep(2000);
     //uart_putstr("AT+CWJAP=\"LenovoAndroid\",\"54321osk\"\r\n");
     uart_putstr("AT+CWJAP=\"-David McMahon\",\"masteryi\"\r\n");
+    //uart_putstr("AT+CWJAP=\"Moto G\",\"09aa276522ec\"\r\n");
     mSleep(16000);
     uart_putstr("AT+CWJAP?\r\n");
 }
@@ -204,11 +206,11 @@ void WIFIStartSend(void){
     WIFISendImagen(0x34);
     mSleep(1000);
     WIFISendComida(0x35);
-    mSleep(600000);
-    uart_putstr("+++");
+    //mSleep(600000);
+    //uart_putstr("+++");
     mSleep(1000);
-    uart_putstr("\r\n");
-    uart_putstr("AT+CIPSTATUS\r\n");    
+    //uart_putstr("\r\n");
+    //uart_putstr("AT+CIPSTATUS\r\n");    
 }
 
 /*************************************************************************/ /**
@@ -417,3 +419,49 @@ void clear_GDRAM(void){
         }
     
 };
+
+/***************************************************************************
+ * SK6812RGBW Functions
+ */
+void SK6812RGBW_init(void)
+{
+    SK6812RGBW_nBits(35*32);//35 Leds
+    SK6812RGBW_source(0);
+    SK6812RGBW_rgbw(0x00000000);
+    SK6812RGBW_rgbw(0x00000000);
+}
+
+uint32_t SK6812RGBW_busy(void)
+{
+    return SK6812RGBW0->busy;
+}
+
+void SK6812RGBW_rgbw(uint32_t rgbw)
+{
+    while (SK6812RGBW_busy());
+    SK6812RGBW0->rgbw = rgbw;
+}
+
+void SK6812RGBW_nBits(uint32_t nBits)
+{
+    while (SK6812RGBW_busy());
+    SK6812RGBW0->nBits = nBits;
+}
+
+void SK6812RGBW_source(uint32_t source)
+{
+    while (SK6812RGBW_busy());
+    SK6812RGBW0->source = source;
+}
+
+void SK6812RGBW_ram(uint32_t color, uint32_t add)
+{
+  uint32_t   *wram   = (uint32_t *)    (0x60000000 + 0x1000 + add);
+  *wram = color;
+}
+
+void SK6812RGBW_ram_w(void)
+{
+    while (SK6812RGBW_busy());
+    SK6812RGBW0->rgbw = 0;
+}

@@ -13,4 +13,4 @@ NET "uart_rxd1" LOC = "P69"; //P69 RX_PI
 NET "uart_txd1" LOC = "P70"; //P70 TX_PI
 
 # ==== EVERLOOP ====
-//NET "led_control"  LOC = "P56";
+NET "led_control"  LOC = "P56";

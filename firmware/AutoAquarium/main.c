@@ -36,6 +36,14 @@ void commandProcessing(const char *buffer){
     char *server_link_s_1 = strstr(buffer, "STATUS:2");
     //Detectar si se conectó al socket
     char *server_link_s_2 = strstr(buffer, "STATUS:4");
+    //Activar filtro
+    char *Filtro_UP = strstr(buffer, "Command1");
+    //Desactivar filtro
+    char *Filtro_Down = strstr(buffer, "Command2");
+    //Tomar foto
+    char *TakePhoto = strstr(buffer, "Command3");
+    //Alimentar peces
+    char *AlimentarPe = strstr(buffer, "Command4");
     //Condicionales para verificación
     if(error_wifi_s != NULL || error_wifi_s_1 != NULL || error_wifi_s_2 != NULL){
         WIFI_INIT();
@@ -52,6 +60,29 @@ void commandProcessing(const char *buffer){
     }
     if (server_link_s_1 != NULL || server_link_s_2 != NULL){
         WIFIConnectServer();        
+    }
+    if(Filtro_UP != NULL){
+        SK6812RGBW_nBits(35 * 32);
+        mSleep(1000);
+        SK6812RGBW_rgbw(0x00ff0000);
+
+    }
+    if(Filtro_Down != NULL){
+        SK6812RGBW_nBits(35 * 32);
+        mSleep(1000);
+        SK6812RGBW_rgbw(0xff000000);
+        
+    }
+    if(TakePhoto != NULL){
+        SK6812RGBW_nBits(35 * 32);
+        mSleep(1000);
+        SK6812RGBW_rgbw(0x0000ff00);
+        
+    }
+    if(AlimentarPe != NULL){
+        SK6812RGBW_nBits(35 * 32);
+        mSleep(1000);
+        SK6812RGBW_rgbw(0x000000ff);        
     }
     return;
 }
@@ -88,7 +119,6 @@ void commandUart_TaskHandler(void)
 
 int main(void)
 {
-    sec_on_display();
     // Init Commands      
     isr_init();
     //tic_init();
@@ -97,11 +127,13 @@ int main(void)
     
     uart_init(); 
     WIFI_INIT();
+    SK6812RGBW_init();
+    
     
 
-    //while(1){
-       // commandUart_TaskHandler();
-    //}
+    while(1){
+        commandUart_TaskHandler();
+    }
     
 
     return 0;
