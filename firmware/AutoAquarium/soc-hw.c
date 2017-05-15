@@ -206,11 +206,6 @@ void WIFIStartSend(void){
     WIFISendImagen(0x34);
     mSleep(1000);
     WIFISendComida(0x35);
-    //mSleep(600000);
-    //uart_putstr("+++");
-    mSleep(1000);
-    //uart_putstr("\r\n");
-    //uart_putstr("AT+CIPSTATUS\r\n");    
 }
 
 /*************************************************************************/ /**

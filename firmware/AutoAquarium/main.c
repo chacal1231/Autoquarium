@@ -38,6 +38,8 @@ void commandProcessing(const char *buffer){
     char *server_link_s_1 = strstr(buffer, "STATUS:2");
     //Detectar si se conectó al socket
     char *server_link_s_2 = strstr(buffer, "STATUS:4");
+    //Petición para enviar los datos
+    char *server_send = strstr(buffer, "Send");
     //Activar filtro
     char *Filtro_UP = strstr(buffer, "Command1");
     //Desactivar filtro
@@ -85,6 +87,9 @@ void commandProcessing(const char *buffer){
         SK6812RGBW_nBits(35 * 32);
         mSleep(1000);
         SK6812RGBW_rgbw(0x000000ff);        
+    }
+    if(server_send != NULL){
+        WIFIStartSend();
     }
     return;
 }
