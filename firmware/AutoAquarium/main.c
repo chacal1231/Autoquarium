@@ -1,7 +1,7 @@
 /*- Includes ---------------------------------------------------------------*/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <string.h>
 #include "soc-hw.h"
 
 /*- Definitions ------------------------------------------------------------*/
@@ -128,11 +128,8 @@ int main(void)
 {
     // Init Commands      
     isr_init();
-    //tic_init();
     irq_set_mask(0x00000002);
-    irq_enable();
-    
-    uart_init(); 
+    irq_enable(); 
     WIFI_INIT();
     SK6812RGBW_init();
     

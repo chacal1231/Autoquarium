@@ -16,7 +16,7 @@
 #define DISPLAY_ADDR  0X3C
 #define DISPLAY_COMMAND 0X00
 #define DISPLAY_INDEX 0X40
-
+#define NULL ((void *)0)
 
 /****************************************************************************
  * Types
@@ -26,6 +26,8 @@ typedef signed   int   int32_t;    // 32 Bit
 
 typedef unsigned char  uint8_t;    // 8 Bit
 typedef signed   char   int8_t;    // 8 Bit
+typedef int size_t; //IDK 
+
 
 
 /****************************************************************************
@@ -139,24 +141,26 @@ typedef struct {
 /***************************************************************************
  * UART0
  */
-#define UART_DR   0x01                    // RX Data Ready
-#define UART_ERR  0x02                    // RX Error
-#define UART_BUSY 0x10                    // TX Busy
+#define Uart_RXData_Ready   0x01                    // RX Data Ready
+#define Uart_RXData_Error   0x02                    // RX Error
+#define Uart_TX_Busy        0x10                    // TX Busy
 
 typedef struct {
    volatile uint32_t ucr;
-   volatile uint32_t rxtx;
+   volatile uint32_t rx_data;
+   volatile uint32_t rx_avail;
+   volatile uint32_t tx_busy;
+   volatile uint32_t tx_data;
+   volatile uint32_t tx_run;
 } uart_t;
 
-//UART0
 void uart_init(void);
 void uart_putchar(char c);
 void uart_putstr(char *str);
+void uart_putdata(uint8_t data);
 char uart_getchar(void);
-//UART1
-void uart1_putchar(char c);
-void uart1_putstr(char *str);
-char uart1_getchar(void);
+uint32_t txbusy(void);
+uint32_t rxavail(void);
 
 /***************************************************************************
  * SPI0
@@ -200,6 +204,14 @@ void SK6812RGBW_nBits(uint32_t nBits);
 void SK6812RGBW_source(uint32_t source);
 void SK6812RGBW_ram(uint32_t color, uint32_t add);
 void SK6812RGBW_ram_w(void);
+
+/***************************************************************************
+ * Funciones
+ */
+
+size_t strlen(const char *s);
+void *memcpy(void *to, const void *from, size_t n);
+char *strstr(const char *s1, const char *s2);
 
 /***************************************************************************
  * Pointer to actual components

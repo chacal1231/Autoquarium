@@ -8,7 +8,7 @@ leds_t              *leds0          = (leds_t *)            0x60000000;
 i2c_t               *i2c0           = (i2c_t *)             0x70000000;
 SK6812RGBW_t        *SK6812RGBW0    = (SK6812RGBW_t *)      0x80000000;
 
-isr_ptr_t isr_table[32];
+isr_ptr_t isr_table[32];    
 
 /***************************************************************************
  * IRQ handling
@@ -103,26 +103,20 @@ void tic_init(void)
 /***************************************************************************
  * UART Functions
  */
-void uart_init(void)
-{
-    //uart0->ier = 0x00;  // Interrupt Enable Register
-    //uart0->lcr = 0x03;  // Line Control Register:    8N1
-    //uart0->mcr = 0x00;  // Modem Control Register
 
-    // Setup Divisor register (Fclk / Baud)
-    //uart0->div = (FCPU/(57600*16));
-}
-//UART0
 char uart_getchar(void)
 {   
-    while (! (uart0->ucr & UART_DR)) ;
-    return uart0->rxtx;
+    while (! (uart0->ucr & Uart_RXData_Ready));
+    return uart0->rx_data;
 }
 
 void uart_putchar(char c)
 {
-    while (uart0->ucr & UART_BUSY) ;
-    uart0->rxtx = c;
+    while (uart0->ucr & Uart_TX_Busy);
+        uart0->tx_data = c;
+        uart0->tx_run = 1;
+        uart0->tx_run = 0; 
+    
 }
 
 void uart_putstr(char *str)
@@ -130,29 +124,18 @@ void uart_putstr(char *str)
     char *c = str;
     while(*c) {
         uart_putchar(*c);
+        while(txbusy()){
+        uSleep(1);
+        }
         c++;
     }
 }
-//UART1
-char uart1_getchar(void)
-{   
-    while (! (uart1->ucr & UART_DR)) ;
-    return uart1->rxtx;
-}
 
-void uart1_putchar(char c)
-{
-    while (uart1->ucr & UART_BUSY) ;
-    uart1->rxtx = c;
+uint32_t txbusy(void){
+    return uart0->tx_busy;
 }
-
-void uart1_putstr(char *str)
-{
-    char *c = str;
-    while(*c) {
-        uart1_putchar(*c);
-        c++;
-    }
+uint32_t rxavail(void){
+    return uart0->rx_avail;
 }
 
 /***************************************************************************
@@ -460,3 +443,60 @@ void SK6812RGBW_ram_w(void)
     while (SK6812RGBW_busy());
     SK6812RGBW0->rgbw = 0;
 }
+
+
+/***************************************************************************
+ * SK6812RGBW Functions
+ */
+/**
+ * strstr - Find the first substring in a %NUL terminated string
+ * @s1: The string to search for
+ * @s2: The string to be searched
+ */
+ /**
+
+ * memcmp - Compare two areas of memory
+ * @cs: One area of memory
+ * @ct: Another area of memory
+ * @count: The size of the area.
+ */
+int memcmp(const void *cs, const void *ct, size_t count)
+{
+    const unsigned char *su1, *su2;
+    int res = 0;
+
+    for (su1 = cs, su2 = ct; 0 < count; ++su1, ++su2, count--)
+        if ((res = *su1 - *su2) != 0)
+            break;
+    return res;
+}
+char *strstr(const char *s1, const char *s2)
+{
+    size_t l1, l2;
+
+    l2 = strlen(s2);
+    if (!l2)
+        return (char *)s1;
+    l1 = strlen(s1);
+    while (l1 >= l2) {
+        l1--;
+        if (!memcmp(s1, s2, l2))
+            return (char *)s1;
+        s1++;
+    }
+    return NULL;
+}
+
+/**
+ * strlen - Find the length of a string
+ * @s: The string to be sized
+ */
+size_t strlen(const char *s)
+{
+    const char *sc;
+
+    for (sc = s; *sc != '\0'; ++sc)
+        /* nothing */;
+    return sc - s;
+}
+

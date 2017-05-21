@@ -328,7 +328,7 @@ char *strstr(const char *s1, const char *s2)
  * @nptr: The start of the string
  * @endptr: A pointer to the end of the parsed string will be placed here
  * @base: The number base to use
- */
+ 
 unsigned long strtoul(const char *nptr, char **endptr, int base)
 {
 	unsigned long result = 0,value;
@@ -356,13 +356,13 @@ unsigned long strtoul(const char *nptr, char **endptr, int base)
 		*endptr = (char *)nptr;
 	return result;
 }
-
+ */
 /**
  * strtol - convert a string to a signed long
  * @nptr: The start of the string
  * @endptr: A pointer to the end of the parsed string will be placed here
  * @base: The number base to use
- */
+ 
 long strtol(const char *nptr, char **endptr, int base)
 {
 	if(*nptr=='-')
@@ -378,7 +378,7 @@ int skip_atoi(const char **s)
 		i = i*10 + *((*s)++) - '0';
 	return i;
 }
-
+ */
 char *number(char *buf, char *end, unsigned long num, int base, int size, int precision, int type)
 {
 	char c,sign,tmp[66];
