@@ -177,17 +177,17 @@ Función establecer conexión con el servidor Sockets
 *****************************************************************************/
 void WIFIStartSend(void){
     uart_putstr("AT+CIPSEND\r\n");
-    mSleep(2000);
+    mSleep(1000);
     WIFISendPotencia(0x30);
-    mSleep(1000);
+    mSleep(100);
     WIFISendpH(0x31);
-    mSleep(1000);
+    mSleep(100);
     WIFISendTemp(0x32);
-    mSleep(1000);
+    mSleep(100);
     WIFISendFiltro(0x33);
-    mSleep(1000);
+    mSleep(100);
     WIFISendImagen(0x34);
-    mSleep(1000);
+    mSleep(100);
     WIFISendComida(0x35);
 }
 

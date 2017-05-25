@@ -1,0 +1,162 @@
+Archive member included because of file (symbol)
+
+../../firmware/libbase/libbase-light.a(divsi3.o)
+                              soc-hw.o (__divsi3)
+
+Allocating common symbols
+Common symbol       size              file
+
+UartBuffer          0x64              main.o
+isr_table           0x80              soc-hw.o
+tic_msec            0x4               soc-hw.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x00000000         0x00004000
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+                0x00000000                __DYNAMIC = 0x0
+                0x00000000                _RAM_START = 0x0
+                0x00004000                _RAM_SIZE = 0x4000
+                0x00004000                _RAM_END = (_RAM_START + _RAM_SIZE)
+
+.text           0x00000000     0x29b4
+                0x00000000                _ftext = .
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text          0x00000000      0x208 crt0ram.o
+                0x00000200                get_gp
+                0x000001f8                get_sp
+                0x00000140                irq_enable
+                0x00000160                irq_get_mask
+                0x00000000                _start
+                0x00000168                jump
+                0x00000158                irq_set_mask
+                0x0000014c                irq_disable
+                0x0000016c                halt
+ .text          0x00000208      0x3d0 main.o
+                0x00000208                commandProcessing
+                0x00000464                commandUart_TaskHandler
+                0x00000508                main
+ .text          0x000005d8     0x2364 soc-hw.o
+                0x0000069c                mSleep
+                0x0000149c                SK6812RGBW_nBits
+                0x00000708                tic_isr
+                0x00000858                txbusy
+                0x0000092c                i2c_write
+                0x0000088c                set_start
+                0x000007d0                uart_putstr
+                0x0000147c                SK6812RGBW_rgbw
+                0x0000163c                itoa
+                0x00000880                WIFIRecivFiltro
+                0x0000067c                isr_unregister
+                0x00002008                WIFI_INIT
+                0x000011e0                clear_GDRAM
+                0x00000884                WIFIRecivTakeImagen
+                0x00000960                send_command_display
+                0x000008b0                leds_refresh
+                0x0000077c                uart_getchar
+                0x00001b3c                WIFISendComida
+                0x00001efc                WIFISendPotencia
+                0x0000155c                strstr
+                0x000006d4                uSleep
+                0x00000664                isr_register
+                0x00002258                WIFIStartSend
+                0x00001468                SK6812RGBW_busy
+                0x0000150c                memcmp
+                0x00000888                WIFIRecivAlimen
+                0x00001a30                WIFISendImagen
+                0x00000994                send_data_display
+                0x000008e8                i2c_read
+                0x000014bc                SK6812RGBW_source
+                0x00001c48                WIFIConnectServer
+                0x00001818                WIFISendTemp
+                0x0000086c                rxavail
+                0x00000640                isr_init
+                0x000005dc                irq_handler
+                0x000005d8                isr_null
+                0x00000734                tic_init
+                0x000009cc                sec_on_display
+                0x000014dc                SK6812RGBW_ram
+                0x00001610                strlen
+                0x00001924                WIFISendFiltro
+                0x000014f0                SK6812RGBW_ram_w
+                0x00001424                SK6812RGBW_init
+                0x0000170c                WIFISendpH
+                0x000007a0                uart_putchar
+                0x000008d4                leds_finish
+ .text          0x0000293c       0x78 ../../firmware/libbase/libbase-light.a(divsi3.o)
+                0x0000293c                __divsi3
+                0x00002978                __modsi3
+                0x000029b4                _etext = .
+
+.rodata         0x000029b4      0x17c
+                0x000029b4                . = ALIGN (0x4)
+                0x000029b4                _frodata = .
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata.str1.4
+                0x000029b4       0x91 main.o
+                                 0x94 (size before relaxing)
+ *fill*         0x00002a45        0x3 00
+ .rodata.str1.4
+                0x00002a48       0xe8 soc-hw.o
+                                 0xec (size before relaxing)
+ *(.rodata1)
+                0x00002b30                _erodata = .
+
+.data           0x00002b30       0x1c
+                0x00002b30                . = ALIGN (0x4)
+                0x00002b30                _fdata = .
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x00002b30        0x0 crt0ram.o
+ .data          0x00002b30        0x0 main.o
+ .data          0x00002b30       0x1c soc-hw.o
+                0x00002b30                uart0
+                0x00002b44                i2c0
+                0x00002b34                timer0
+                0x00002b40                leds0
+                0x00002b3c                uart1
+                0x00002b38                gpio0
+                0x00002b48                SK6812RGBW0
+ .data          0x00002b4c        0x0 ../../firmware/libbase/libbase-light.a(divsi3.o)
+ *(.data1)
+                0x00002b50                _gp = ALIGN (0x10)
+ *(.sdata .sdata.* .gnu.linkonce.s.*)
+                0x00002b4c                _edata = .
+
+.bss            0x00002b4c       0xec
+                0x00002b4c                . = ALIGN (0x4)
+                0x00002b4c                _fbss = .
+ *(.dynsbss)
+ *(.sbss .sbss.* .gnu.linkonce.sb.*)
+ *(.scommon)
+ *(.dynbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x00002b4c        0x0 crt0ram.o
+ .bss           0x00002b4c        0x4 main.o
+                0x00002b4c                UartBufferPtr
+ .bss           0x00002b50        0x0 soc-hw.o
+ .bss           0x00002b50        0x0 ../../firmware/libbase/libbase-light.a(divsi3.o)
+ *(COMMON)
+ COMMON         0x00002b50       0x64 main.o
+                0x00002b50                UartBuffer
+ COMMON         0x00002bb4       0x84 soc-hw.o
+                0x00002bb4                isr_table
+                0x00002c34                tic_msec
+                0x00002c38                _ebss = .
+                0x00002c38                _end = .
+                0x00003ffc                PROVIDE (_fstack, 0x3ffc)
+LOAD crt0ram.o
+LOAD main.o
+LOAD soc-hw.o
+START GROUP
+LOAD ../../firmware/libbase/libbase-light.a
+END GROUP
+OUTPUT(image.elf elf32-lm32)
+
+.comment        0x00000000       0x36
+ .comment       0x00000000       0x12 main.o
+ .comment       0x00000012       0x12 soc-hw.o
+ .comment       0x00000024       0x12 ../../firmware/libbase/libbase-light.a(divsi3.o)

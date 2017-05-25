@@ -17,20 +17,23 @@ all: image.ram
 	cat image.ram | cut -c 5-6 > image1.ram
 	cat image.ram | cut -c 7-8 > image0.ram
 
-%.srec: %.elf
+%.srec: %.elf %.lst
 	$(OBJCOPY) $(SEGMENTS) -O srec $< $@
 
-%.lst: %.elf
-	$(OBJDUMP) -h -S $< > $@
+%.lst:
+	$(OBJDUMP) -h -S image.elf > image.lstq
 
 %.bin: %.elf
 	$(OBJCOPY) $(SEGMENTS) -O binary $< $@
 	chmod -x $@
 
+
 image.elf: linker.ld $(OBJECTS) $(LIBS)
 
+
+
 %.elf:
-	$(LD) $(LDFLAGS) -T $< -N -o $@ $(OBJECTS) -L$(MMDIR)/firmware/libbase --start-group -lbase-light --end-group
+	$(LD) $(LDFLAGS) -Map image.map -T $< -N -o $@ $(OBJECTS) -L$(MMDIR)/firmware/libbase --start-group -lbase-light --end-group
 	chmod -x $@
 
 $(MMDIR)/firmware/libbase/libbase-light.a:
@@ -42,7 +45,7 @@ depend:
 	makedepend -Y -- $(CFLAGS) -- *.c
 
 clean:
-	rm -f *.o *.elf *.bin *.lst *.srec *.ram .*~ *~ Makefile.bak
+	rm -f *.o *.elf *.bin  *.ram .*~ *~ Makefile.bak
 
 # DO NOT DELETE
 
