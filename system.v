@@ -49,6 +49,7 @@ wire [31:0]  lm32i_adr,
              memory0_adr,
              i2c0_adr,
              SK6812RGBW0_adr,
+             fuente0_adr,
              timer0_adr,
              gpio0_adr,
              ddr0_adr,
@@ -68,6 +69,8 @@ wire [31:0]  lm32i_dat_r,
              memory0_dat_w,
              SK6812RGBW0_dat_r,
              SK6812RGBW0_dat_w,
+             fuente0_dat_r,
+             fuente0_dat_w,
              i2c0_dat_r,
              i2c0_dat_w,
              timer0_dat_r,
@@ -88,6 +91,7 @@ wire [3:0]   lm32i_sel,
              memory0_sel,
              i2c0_sel,
              SK6812RGBW0_sel,
+             fuente0_sel,
              timer0_sel,
              gpio0_sel,
              bram0_sel,
@@ -101,6 +105,7 @@ wire         lm32i_we,
              memory0_we,
              i2c0_we,
              SK6812RGBW0_we,
+             fuente0_we,
              timer0_we,
              gpio0_we,
              bram0_we,
@@ -115,6 +120,7 @@ wire         lm32i_cyc,
              memory0_cyc,
              i2c0_cyc,
              SK6812RGBW0_cyc,
+             fuente0_cyc,
              timer0_cyc,
              gpio0_cyc,
              bram0_cyc,
@@ -129,6 +135,7 @@ wire         lm32i_stb,
              memory0_stb,
              i2c0_stb,
              SK6812RGBW0_stb,
+             fuente0_stb,
              timer0_stb,
              gpio0_stb,
              bram0_stb,
@@ -142,6 +149,7 @@ wire         lm32i_ack,
              memory0_ack,
              i2c0_ack,
              SK6812RGBW0_ack,
+             fuente0_ack,
              timer0_ack,
              gpio0_ack,
              bram0_ack,
@@ -186,7 +194,9 @@ conbus #(
 	.s4_addr(4'h5),// uart1      0x50000000 
 	.s5_addr(4'h6),//Iluminacion 0x60000000
 	.s6_addr(4'h7), //i2C 		 0x70000000
-	.s7_addr(4'h8) //Everloop	 0x80000000
+	.s7_addr(4'h8), //Everloop	 0x80000000
+	.s8_addr(4'h9) //fuente0	 0x90000000
+
 
 ) conbus0(
 	.sys_clk( clk ),
@@ -282,7 +292,17 @@ conbus #(
 	.s7_we_o(   SK6812RGBW0_we    ),
 	.s7_cyc_o(  SK6812RGBW0_cyc   ),
 	.s7_stb_o(  SK6812RGBW0_stb   ),
-	.s7_ack_i(  SK6812RGBW0_ack   )
+	.s7_ack_i(  SK6812RGBW0_ack   ),
+	// Slave8
+	.s8_dat_i(  fuente0_dat_r ),
+	.s8_dat_o(  fuente0_dat_w ),
+	.s8_adr_o(  fuente0_adr   ),
+	.s8_sel_o(  fuente0_sel   ),
+	.s8_we_o(   fuente0_we    ),
+	.s8_cyc_o(  fuente0_cyc   ),
+	.s8_stb_o(  fuente0_stb   ),
+	.s8_ack_i( fuente0_ack ) 
+
 	
 );
 
@@ -509,6 +529,24 @@ wb_SK6812RGBW SK6812RGBW0 (
    .wb_dat_o(SK6812RGBW0_dat_r),
    // SK6812RGBW Output
    .led_control(led_control)
+);
+
+//---------------------------------------------------------------------------
+// ROM FUENTE
+//---------------------------------------------------------------------------
+
+wb_fuente fuente0 (
+	  .clk(clk),
+	  .reset( ~rst), 
+	  //
+	  .wb_adr_i( fuente0_adr ),
+	  .wb_dat_i( fuente0_dat_w ),
+	  .wb_dat_o( fuente0_dat_r ),
+	  .wb_stb_i( fuente0_stb ),
+	  .wb_cyc_i( fuente0_cyc ),
+	  .wb_we_i(  fuente0_we ),
+	  .wb_sel_i( fuente0_sel ),
+	  .wb_ack_o( fuente0_ack )
 );
 
 //----------------------------------------------------------------------------

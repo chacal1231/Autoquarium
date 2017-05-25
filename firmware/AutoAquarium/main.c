@@ -126,7 +126,7 @@ void commandUart_TaskHandler(void)
 
 int main(void)
 {
-    // Init Commands      
+    // Init Commands    
     isr_init();
     irq_set_mask(0x00000002);
     irq_enable(); 

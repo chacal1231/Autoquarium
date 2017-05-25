@@ -48,7 +48,9 @@ SRC=                                      \
 	../rtl/wb_conbus/conbus.v          \
 	../rtl/wb_conbus/conbus_arb.v      \
 	../rtl/wb_i2c/i2c_master_wb.v	\
-	../rtl/wb_i2c/i2c_master.v	
+	../rtl/wb_i2c/i2c_master.v	\
+	../rtl/wb_fuente/wb_fuente.v	\
+	../rtl/wb_fuente/ROM_fuente.v
 
 IP=192.168.2.1
 #############################################################################

@@ -179,12 +179,34 @@ void spi_putchar(char c);
 char spi_getchar(void);
 
 /***************************************************************************
- * Pantalla y pH
+ * Funciones display
  */
-void send_command_display(uint32_t addr, uint32_t command);
-void send_data_display(uint32_t addr, uint32_t data);
+ 
+void send_command_display(uint8_t addr, uint8_t command);
+void send_data_display(uint8_t addr, uint8_t data);
 void sec_on_display(void);
 void clear_GDRAM(void);
+void set_position(uint8_t posx, uint8_t posy);
+void print_char(uint8_t code);
+void print_cadena_ascii(char* cadena);
+void print_entero_ascii(int numero);
+void print_wifi_hour(uint8_t hora, uint8_t minutos);
+void init_display(void);
+void principal_display(uint8_t hora, uint8_t minutos, uint8_t temperatura, uint8_t ph);
+void password(uint8_t);
+void menu_display(void);
+
+/***************************************************************************
+ * Fuente0
+ */
+ 
+ typedef struct {
+        volatile uint32_t rd;
+        volatile uint32_t addr_rd;
+        volatile uint32_t d_out;
+ } fuente_t;
+ 
+uint8_t fuente_read_data(uint32_t addr_rd);
 
 /***************************************************************************
  * SK6812RGBW0
@@ -222,6 +244,7 @@ extern    gpio_t         *gpio0;
 extern    uart_t         *uart1;
 extern    leds_t         *leds0;
 extern    uint32_t       *sram0;
-extern    SK6812RGBW_t   *SK6812RGBW0; 
+extern    SK6812RGBW_t   *SK6812RGBW0;
+extern    fuente_t       *fuente0; 
 
 #endif // SPIKEHW_H

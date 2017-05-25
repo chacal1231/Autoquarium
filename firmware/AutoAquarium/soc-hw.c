@@ -7,6 +7,7 @@ uart_t              *uart1          = (uart_t *)            0x50000000;
 leds_t              *leds0          = (leds_t *)            0x60000000;
 i2c_t               *i2c0           = (i2c_t *)             0x70000000;
 SK6812RGBW_t        *SK6812RGBW0    = (SK6812RGBW_t *)      0x80000000;
+fuente_t            *fuente0        = (fuente_t*)           0x90000000;
 
 isr_ptr_t isr_table[32];    
 
@@ -136,6 +137,86 @@ uint32_t txbusy(void){
 }
 uint32_t rxavail(void){
     return uart0->rx_avail;
+}
+
+/***************************************************************************
+ * C Functions
+ */
+/**
+ * strstr - Find the first substring in a %NUL terminated string
+ * @s1: The string to search for
+ * @s2: The string to be searched
+ */
+ /**
+
+ * memcmp - Compare two areas of memory
+ * @cs: One area of memory
+ * @ct: Another area of memory
+ * @count: The size of the area.
+ */
+int memcmp(const void *cs, const void *ct, size_t count)
+{
+    const unsigned char *su1, *su2;
+    int res = 0;
+
+    for (su1 = cs, su2 = ct; 0 < count; ++su1, ++su2, count--)
+        if ((res = *su1 - *su2) != 0)
+            break;
+    return res;
+}
+char *strstr(const char *s1, const char *s2)
+{
+    size_t l1, l2;
+
+    l2 = strlen(s2);
+    if (!l2)
+        return (char *)s1;
+    l1 = strlen(s1);
+    while (l1 >= l2) {
+        l1--;
+        if (!memcmp(s1, s2, l2))
+            return (char *)s1;
+        s1++;
+    }
+    return NULL;
+}
+
+/**
+ * strlen - Find the length of a string
+ * @s: The string to be sized
+ */
+size_t strlen(const char *s)
+{
+    const char *sc;
+
+    for (sc = s; *sc != '\0'; ++sc)
+        /* nothing */;
+    return sc - s;
+}
+/**
+ * itoa
+ */
+char *itoa(int i, char b[]){
+    char const digit[] = "0123456789";
+    char *p = b;
+    if (i < 0)
+    {
+        *p++ = '-';
+        i *= -1;
+    }
+    int shifter = i;
+    do
+    { //Move to where representation ends
+        ++p;
+        shifter = shifter / 10;
+    } while (shifter);
+    *p = '\0';
+    do
+    { //Move back, inserting digits as u go
+        *--p = digit[i % 10];
+        i = i / 10;
+    } while (i);
+    return b;
 }
 
 /***************************************************************************
@@ -303,99 +384,140 @@ void i2c_write(uint32_t slave_addr, uint32_t per_addr, uint32_t data){
 }
 
 /***************************************************************************
- * Pantalla y pH Functions
+ * Display Functions
  */
 
-void send_command_display(uint32_t addr, uint32_t command){
+void send_command_display(uint8_t addr, uint8_t command){
     i2c_write(addr, DISPLAY_COMMAND, command);
 };
 
-void send_data_display(uint32_t addr, uint32_t data){
+void send_data_display(uint8_t addr, uint8_t data){
     i2c_write(addr, DISPLAY_INDEX, data);
 };
 
 void sec_on_display(void){
-        mSleep(1);
-    send_command_display(DISPLAY_ADDR,0xAE); //OFF PANTALLA 
-    mSleep(1);
-    send_command_display(DISPLAY_ADDR,0X20); // MODO DE DIRECCIONAMIENTO
-    mSleep(1);
-    send_command_display(DISPLAY_ADDR,0x00);
-    mSleep(1);
-    send_command_display(DISPLAY_ADDR,0xB0); // CUADRAR DIRECCIÓN INICIAL DE PAGINA
-    mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xC8); //OUTPUT SCAN COM DIRECTORY
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x00); // --- SET LOW COLUMN ADDR ADDRES       
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x10); // --- SET HIGH COLUMN ADDR
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x40); // --- SET STAR LINE ADDR
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x81); // SET CONTRAST
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x3F); //
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xA1); // SET SEGMENT RE-MAP. A1=addr 127 MAPPED
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xA6); // SET DISPLAY MODE. A6=NORMAL
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xA8); // SET MUX RATIO
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x3F);
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xA4); // OUTPUT RAM TO DISPLAY
-        //send_command_display(DISPLAY_ADDR,0xA5); // ENTIRE DISPLAY ON
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xD3); // DISPLAY OFFSET. 00= NO
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x00);
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xD5); //---SET DISPLAY CLOCK  DIVIDE RATIO /OSCILATOR
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xF0); //-- SET DIVIDE RATIO
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xD9); //SET PRE-CHARGUE PERIOD
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x22);
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xDA); //SET COM PINS 
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x12);
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xDB); //--SET VCOMH
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x20); //0x20,0.77xVcc
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x8D); //SET DC-DC ENABLE
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0x14); 
-        mSleep(1);
-        send_command_display(DISPLAY_ADDR,0xAF); //ON PANTALLA
-        mSleep(1);
+    uint32_t addr = 642;
+        uint8_t data;
+        uint8_t k; 
+        for(k=0;k<28;k++){
+            data = fuente_read_data(addr+k);
+            send_command_display(DISPLAY_ADDR,data);
+        };
 };  
 
+
+
 void clear_GDRAM(void){
-        int i, j;
-        mSleep(1);
-    send_command_display(DISPLAY_ADDR,0x21); //Configurar el direccionamiento por columna
-        mSleep(1);
-    send_command_display(DISPLAY_ADDR,0x00);
-    mSleep(1);
-    send_command_display(DISPLAY_ADDR,0x7F);
-    mSleep(1);
-    send_command_display(DISPLAY_ADDR,0x22); //Configurar el diferccionamiento por página
-    mSleep(1);
-    send_command_display(DISPLAY_ADDR,0x00);
-    mSleep(1);
-    send_command_display(DISPLAY_ADDR,0x07);
+        uint8_t i, j;
+        set_position(0x00, 0x00);
     for(j=1;j<9;j++){
-            for (i=1;i<129;i++) {  
-                mSleep(1);
-                    send_data_display(0x3C, 0x00);
+            for (i=1;i<129;i++) {
+                    send_data_display(DISPLAY_ADDR, 0x00);
             }
         }
     
+};
+
+void set_position(uint8_t posx, uint8_t posy){
+    send_command_display(DISPLAY_ADDR,0x21); //Configurar el direccionamiento por columna
+    send_command_display(DISPLAY_ADDR,posx);
+    send_command_display(DISPLAY_ADDR,0x7F);
+    send_command_display(DISPLAY_ADDR,0x22); //Configurar el direccionamiento por página
+    send_command_display(DISPLAY_ADDR,posy);
+    send_command_display(DISPLAY_ADDR,0x07);
+};
+
+void print_char(uint8_t code){
+        uint32_t addr = (code*6);
+        uint8_t data;
+        uint8_t k; 
+        for(k=0;k<6;k++){
+            data = fuente_read_data(addr+k);
+            send_data_display(DISPLAY_ADDR,data);
+        };
+};
+
+void print_cadena_ascii(char* cadena){               
+    uint8_t i;
+   
+    for(i = 0; cadena[i] !='\0'; i++){      
+            print_char(cadena[i]-32); 
+    };
+};
+
+void print_entero_ascii(int numero){
+    uint8_t c = numero;
+    uint8_t contador = 1; 
+    
+     while(c/10>0)
+    {
+        c=c/10;
+        contador++;
+    };
+    
+    char buffer[contador];
+    
+    itoa(numero,buffer);
+    
+    print_cadena_ascii(buffer);
+};
+
+void print_wifi_hour(uint8_t hora, uint8_t minutos){
+        set_position(80, 0);
+        print_entero_ascii(hora);
+        print_char(26);
+        print_entero_ascii(minutos);
+        print_char(00);
+        print_char(94);
+        print_char(95);
+};
+
+void init_display(void){
+        uint8_t i;
+        set_position(23,3);
+        print_cadena_ascii("AUTOAQUARIUM");
+        //peces
+        set_position(19,5);
+        for(i=0;i<3;i++){
+                print_char(00);
+                print_char(96);
+                print_char(97);
+                print_char(00);
+                print_char(00);
+        };
+};
+
+void principal_display(uint8_t hora, uint8_t minutos, uint8_t temperatura, uint8_t ph){
+        print_wifi_hour(hora,minutos);
+        set_position(4,1);
+        print_char(98);
+        print_char(99);
+        set_position(4,2);
+        print_char(100);
+        print_char(101);
+        print_cadena_ascii("Temperatura: ");
+        print_entero_ascii(temperatura);
+        print_char(102);
+        print_char(35);
+        set_position(4,3);
+        print_char(103);
+        print_char(104);
+        set_position(4,4);
+        print_char(105);
+        print_char(106);
+        print_cadena_ascii("Nivel de PH: ");
+        print_entero_ascii(ph);        
+};
+
+/***************************************************************************
+ * Fuente Functions
+ */
+
+uint8_t fuente_read_data(uint32_t addr){
+    fuente0->addr_rd    = addr;
+    fuente0->rd     = 1;
+    fuente0->rd     = 0;
+    return fuente0->d_out;
 };
 
 /***************************************************************************
@@ -444,81 +566,3 @@ void SK6812RGBW_ram_w(void)
     SK6812RGBW0->rgbw = 0;
 }
 
-
-/***************************************************************************
- * C Functions
- */
-/**
- * strstr - Find the first substring in a %NUL terminated string
- * @s1: The string to search for
- * @s2: The string to be searched
- */
- /**
-
- * memcmp - Compare two areas of memory
- * @cs: One area of memory
- * @ct: Another area of memory
- * @count: The size of the area.
- */
-int memcmp(const void *cs, const void *ct, size_t count)
-{
-    const unsigned char *su1, *su2;
-    int res = 0;
-
-    for (su1 = cs, su2 = ct; 0 < count; ++su1, ++su2, count--)
-        if ((res = *su1 - *su2) != 0)
-            break;
-    return res;
-}
-char *strstr(const char *s1, const char *s2)
-{
-    size_t l1, l2;
-
-    l2 = strlen(s2);
-    if (!l2)
-        return (char *)s1;
-    l1 = strlen(s1);
-    while (l1 >= l2) {
-        l1--;
-        if (!memcmp(s1, s2, l2))
-            return (char *)s1;
-        s1++;
-    }
-    return NULL;
-}
-
-/**
- * strlen - Find the length of a string
- * @s: The string to be sized
- */
-size_t strlen(const char *s)
-{
-    const char *sc;
-
-    for (sc = s; *sc != '\0'; ++sc)
-        /* nothing */;
-    return sc - s;
-}
-
-char *itoa(int i, char b[]){
-    char const digit[] = "0123456789";
-    char *p = b;
-    if (i < 0)
-    {
-        *p++ = '-';
-        i *= -1;
-    }
-    int shifter = i;
-    do
-    { //Move to where representation ends
-        ++p;
-        shifter = shifter / 10;
-    } while (shifter);
-    *p = '\0';
-    do
-    { //Move back, inserting digits as u go
-        *--p = digit[i % 10];
-        i = i / 10;
-    } while (i);
-    return b;
-}
