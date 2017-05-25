@@ -14,3 +14,7 @@ NET "uart_txd1" LOC = "P70"; //P70 TX_PI
 
 # ==== EVERLOOP ====
 NET "led_control"  LOC = "P56";
+
+# ==== I2C ====
+NET "scl"		LOC = "P80" | IOSTANDARD = LVCMOS33;
+NET "sda" 		LOC = "P81" | IOSTANDARD = LVCMOS33;

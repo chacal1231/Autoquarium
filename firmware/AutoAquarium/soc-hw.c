@@ -363,7 +363,7 @@ uint32_t leds_finish(void){
  * I2C Functions
  */
  
-uint8_t i2c_read(uint32_t slave_addr, uint32_t per_addr)
+uint8_t i2c_read(uint8_t slave_addr, uint8_t per_addr)
 {
         
     while(!(i2c0->scr & I2C_DR));       //Se verifica que el bus esté en espera
@@ -372,15 +372,17 @@ uint8_t i2c_read(uint32_t slave_addr, uint32_t per_addr)
     i2c0->start_rd  = 0x00;
     while(!(i2c0->scr & I2C_DR));
     return i2c0->i2c_rx_data;
+    mSleep(2);
 }
 
-void i2c_write(uint32_t slave_addr, uint32_t per_addr, uint32_t data){
+void i2c_write(uint8_t slave_addr, uint8_t per_addr, uint8_t data){
     
     while(!(i2c0->scr & I2C_DR));       //Se verifica que el bus esté en espera
     i2c0->s_address = slave_addr;
     i2c0->s_reg     = per_addr;
     i2c0->tx_data   = data;
     i2c0->start_wr  = 0x00;
+    mSleep(1);
 }
 
 /***************************************************************************
